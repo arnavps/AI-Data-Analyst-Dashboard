@@ -8,6 +8,7 @@ import { Input } from "@/app/components/ui/Input";
 import { Select } from "@/app/components/ui/Select";
 import { FileUploader } from "@/app/components/ui/FileUploader";
 import ChatInterface from "@/app/components/chat/ChatInterface";
+import { DashboardView } from "@/app/components/dashboard/DashboardView";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Activity, 
@@ -25,6 +26,7 @@ import {
 export default function Home() {
   const [selectedRange, setSelectedRange] = useState("last-30");
   const [activeFile, setActiveFile] = useState<{ id: string; metadata: any } | null>(null);
+  const [viewMode, setViewMode] = useState<"chat" | "dashboard">("dashboard");
 
   const ranges = [
     { label: "Last 7 Days", value: "last-7" },
@@ -54,8 +56,19 @@ export default function Home() {
         </div>
 
         <nav className="flex-1 px-4 space-y-1">
-          <NavItem icon={<LayoutDashboard size={18} />} label="Overview" active={!activeFile} onClick={() => setActiveFile(null)} />
-          <NavItem icon={<MessageSquare size={18} />} label="Chat Assistant" active={!!activeFile} />
+          <NavItem 
+            icon={<LayoutDashboard size={18} />} 
+            label="Overview" 
+            active={viewMode === "dashboard"} 
+            onClick={() => setViewMode("dashboard")} 
+          />
+          <NavItem 
+            icon={<MessageSquare size={18} />} 
+            label="AI Assistant" 
+            active={viewMode === "chat"} 
+            onClick={() => setViewMode("chat")}
+            disabled={!activeFile}
+          />
           <NavItem icon={<BarChart3 size={18} />} label="Data Vault" />
           <NavItem icon={<Users size={18} />} label="Team" />
           <NavItem icon={<Settings size={18} />} label="Preferences" />
@@ -135,7 +148,7 @@ export default function Home() {
                    <StatCard title="System Load" value="12%" trend="-5%" trendUp={false} />
                 </div>
               </motion.div>
-            ) : (
+            ) : viewMode === "chat" ? (
               <motion.div 
                 key="chat"
                 initial={{ opacity: 0, scale: 0.98 }}
@@ -145,6 +158,20 @@ export default function Home() {
               >
                 <ChatInterface fileId={activeFile.id} metadata={activeFile.metadata} />
               </motion.div>
+            ) : (
+              <motion.div 
+                key="dashboard-view"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="h-full"
+              >
+                <DashboardView 
+                  metadata={activeFile.metadata} 
+                  onNewAnalysis={() => setActiveFile(null)} 
+                  onSwitchToChat={() => setViewMode("chat")}
+                />
+              </motion.div>
             )}
           </AnimatePresence>
         </div>
@@ -153,15 +180,28 @@ export default function Home() {
   );
 }
 
-function NavItem({ icon, label, active = false, onClick }: { icon: React.ReactNode; label: string; active?: boolean; onClick?: () => void }) {
+function NavItem({ 
+  icon, 
+  label, 
+  active = false, 
+  disabled = false,
+  onClick 
+}: { 
+  icon: React.ReactNode; 
+  label: string; 
+  active?: boolean; 
+  disabled?: boolean;
+  onClick?: () => void 
+}) {
   return (
     <div 
-      onClick={onClick}
+      onClick={!disabled ? onClick : undefined}
       className={cn(
         "flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all cursor-pointer group",
         active 
           ? "bg-apple-blue text-white shadow-subtle" 
-          : "text-apple-text-secondary hover:bg-zinc-100 hover:text-apple-text-primary"
+          : "text-apple-text-secondary hover:bg-zinc-100 hover:text-apple-text-primary",
+        disabled && "opacity-50 cursor-not-allowed pointer-events-none"
       )}
     >
       <span className={cn("transition-colors", active ? "text-white" : "group-hover:text-apple-blue")}>
