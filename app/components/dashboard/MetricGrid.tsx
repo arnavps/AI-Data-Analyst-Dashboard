@@ -2,7 +2,7 @@
 
 import React, { useMemo } from "react";
 import { motion } from "framer-motion";
-import { TrendingUp, TrendingDown, Activity, DollarSign, Users, Package } from "lucide-react";
+import { TrendingUp, TrendingDown, Activity, DollarSign, Users, Package, Database, BarChart3, Calculator, Hash } from "lucide-react";
 import { cn } from "@/app/lib/utils";
 import { ResponsiveContainer, AreaChart, Area } from "recharts";
 import { CountUp } from "../ui/CountUp";
@@ -31,7 +31,7 @@ export const MetricGrid = React.memo(function MetricGrid({ metadata }: MetricGri
           format: (val) => val.toLocaleString(),
           trend: "Ready",
           trendUp: true,
-          icon: <Activity className="text-apple-blue" size={20} />,
+          icon: <Activity className="text-[#0071E3]" size={20} />,
           data: [{ val: 10 }, { val: 20 }, { val: 30 }]
         }
       ];
@@ -62,13 +62,13 @@ export const MetricGrid = React.memo(function MetricGrid({ metadata }: MetricGri
       return {
         title: isNumber ? `Avg ${col}` : `Unique ${col}`,
         value: isNumber ? (stats?.avg || 0) : (stats?.uniqueCount || 0),
-        format: (val) => typeof val === 'number' ? val.toLocaleString(undefined, { 
-          maximumFractionDigits: isNumber ? 2 : 0 
+        format: (val) => typeof val === 'number' ? val.toLocaleString(undefined, {
+          maximumFractionDigits: isNumber ? 2 : 0
         }) : val,
         trend: isNumber ? "Live Stats" : "Distribution",
         trendUp: true,
         icon: icons[i % icons.length],
-        data: isNumber 
+        data: isNumber
           ? metadata.preview.map((row: any) => ({ val: row[col] || 0 }))
           : metadata.preview.map((row: any, idx: number) => ({ val: idx % 5 + 2 })) // Simple mock trend for strings
       };
@@ -101,7 +101,7 @@ export const MetricGrid = React.memo(function MetricGrid({ metadata }: MetricGri
           </div>
 
           <div>
-            <p className="text-[11px] font-bold text-apple-text-secondary uppercase tracking-[0.12em] truncate opacity-80">{metric.title}</p>
+            <p className="text-[11px] font-bold text-[#86868B] uppercase tracking-[0.12em] truncate opacity-80">{metric.title}</p>
             <h2 className="text-[36px] font-bold mt-2 tracking-tight dark:text-white leading-tight">
               <CountUp value={metric.value} format={metric.format} />
             </h2>
