@@ -89,6 +89,39 @@ export function FileUploader({ onSuccess }: FileUploaderProps) {
     multiple: false,
   });
 
+  const handleUpload = async () => {
+    if (!file) return;
+
+    // Perform real upload to backend
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch("http://localhost:5000/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast.success("Analysis ready!");
+        if (onSuccess) {
+          onSuccess(result.data);
+        }
+      } else {
+        throw new Error(result.error || "Upload failed");
+      }
+    } catch (error: any) {
+      toast.error("Upload failed", {
+        description: error.message,
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   const removeFile = () => {
     setFile(null);
     setMetadata(null);
@@ -151,7 +184,7 @@ export function FileUploader({ onSuccess }: FileUploaderProps) {
             className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 shadow-card relative overflow-hidden"
           >
             {isUploading && (
-              <div className="absolute top-0 left-0 h-1 bg-apple-blue transition-all duration-300" style={{ width: `${uploadProgress}%` }} />
+              <div className="absolute top-0 left-0 h-1 bg-apple-blue transition-all duration-300 animate-pulse" style={{ width: `100%` }} />
             )}
 
             <div className="flex items-start justify-between">
@@ -176,11 +209,11 @@ export function FileUploader({ onSuccess }: FileUploaderProps) {
             <div className="mt-6 grid grid-cols-2 gap-4">
               <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800">
                 <p className="text-xs text-text-secondary mb-1">Total Rows</p>
-                <p className="font-bold">{isUploading ? "..." : metadata?.rows.toLocaleString()}</p>
+                <p className="font-bold">{metadata?.rows.toLocaleString() || "..."}</p>
               </div>
               <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800">
                 <p className="text-xs text-text-secondary mb-1">Total Columns</p>
-                <p className="font-bold">{isUploading ? "..." : metadata?.cols}</p>
+                <p className="font-bold">{metadata?.cols || "..."}</p>
               </div>
             </div>
 
@@ -219,19 +252,7 @@ export function FileUploader({ onSuccess }: FileUploaderProps) {
               <Button 
                 disabled={isUploading} 
                 size="sm"
-                onClick={() => {
-                  if (onSuccess && metadata && data) {
-                    onSuccess({
-                      fileId: Math.random().toString(36).substr(2, 9),
-                      name: metadata.name,
-                      size: metadata.size,
-                      rows: metadata.rows,
-                      cols: metadata.cols,
-                      headers: metadata.headers,
-                      data: data
-                    });
-                  }
-                }}
+                onClick={handleUpload}
               >
                 Analyze Now
               </Button>
