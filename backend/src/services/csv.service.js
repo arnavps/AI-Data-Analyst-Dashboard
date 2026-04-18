@@ -47,13 +47,17 @@ class CSVService {
 
     headers.forEach(header => {
       if (types[header] === 'number') {
-        const values = data.map(row => row[header]).filter(v => typeof v === 'number');
-        stats[header] = {
-          min: Math.min(...values),
-          max: Math.max(...values),
-          avg: values.reduce((a, b) => a + b, 0) / values.length,
-          count: values.length
-        };
+        const values = data.map(row => row[header]).filter(v => typeof v === 'number' && !isNaN(v));
+        if (values.length > 0) {
+          stats[header] = {
+            min: Math.min(...values),
+            max: Math.max(...values),
+            avg: values.reduce((a, b) => a + b, 0) / values.length,
+            count: values.length
+          };
+        } else {
+          stats[header] = { min: 0, max: 0, avg: 0, count: 0 };
+        }
       } else {
         const values = data.map(row => row[header]).filter(v => v !== null && v !== undefined);
         stats[header] = {

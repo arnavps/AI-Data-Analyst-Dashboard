@@ -18,7 +18,8 @@ exports.uploadFile = async (req, res, next) => {
     const types = csvService.detectColumnTypes(results.data);
     const stats = csvService.generateStats(results.data, types);
 
-    const fileId = uuidv4();
+    // Store file metadata in memory (replace with DB in production)
+    const fileId = Date.now().toString();
     const metadata = {
       id: fileId,
       filename: req.file.originalname,
@@ -30,6 +31,14 @@ exports.uploadFile = async (req, res, next) => {
       data: results.data, // Store full data for querying
       createdAt: new Date().toISOString()
     };
+
+    console.log('Backend Metadata Generated:', {
+      fileId,
+      rowCount: metadata.rowCount,
+      columnCount: metadata.columns.length,
+      hasStats: !!metadata.stats,
+      statsKeys: Object.keys(metadata.stats || {})
+    });
 
     fileStore.set(fileId, metadata);
 
