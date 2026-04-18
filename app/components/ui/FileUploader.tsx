@@ -181,23 +181,23 @@ export function FileUploader({ onSuccess }: FileUploaderProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 shadow-card relative overflow-hidden"
+            className="rounded-2xl border border-zinc-200/50 bg-white p-6 shadow-card relative overflow-hidden dark:border-zinc-800/50 dark:bg-zinc-900"
           >
             {isUploading && (
               <div className="absolute top-0 left-0 h-1 bg-apple-blue transition-all duration-300 animate-pulse" style={{ width: `100%` }} />
             )}
-
+ 
             <div className="flex items-start justify-between">
               <div className="flex items-center space-x-4">
                 <div className="h-12 w-12 rounded-xl bg-apple-blue/10 flex items-center justify-center text-apple-blue">
                   <FileSpreadsheet size={24} />
                 </div>
                 <div>
-                  <h4 className="font-bold text-lg truncate max-w-[250px]">{file.name}</h4>
-                  <p className="text-sm text-text-secondary">{formatFileSize(file.size)}</p>
+                  <h4 className="font-bold text-lg truncate max-w-[250px] text-apple-text-primary dark:text-white">{file.name}</h4>
+                  <p className="text-sm text-apple-text-secondary">{formatFileSize(file.size)}</p>
                 </div>
               </div>
-
+ 
               <button
                 onClick={removeFile}
                 className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-error"
@@ -205,15 +205,15 @@ export function FileUploader({ onSuccess }: FileUploaderProps) {
                 <X size={20} />
               </button>
             </div>
-
+ 
             <div className="mt-6 grid grid-cols-2 gap-4">
-              <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800">
-                <p className="text-xs text-text-secondary mb-1">Total Rows</p>
-                <p className="font-bold">{metadata?.rows.toLocaleString() || "..."}</p>
+              <div className="p-3 rounded-xl bg-zinc-50 border border-zinc-100 dark:bg-zinc-800/30 dark:border-zinc-700/30">
+                <p className="text-xs text-apple-text-secondary mb-1">Total Rows</p>
+                <p className="font-bold dark:text-white">{metadata?.rows.toLocaleString() || "..."}</p>
               </div>
-              <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800">
-                <p className="text-xs text-text-secondary mb-1">Total Columns</p>
-                <p className="font-bold">{metadata?.cols || "..."}</p>
+              <div className="p-3 rounded-xl bg-zinc-50 border border-zinc-100 dark:bg-zinc-800/30 dark:border-zinc-700/30">
+                <p className="text-xs text-apple-text-secondary mb-1">Total Columns</p>
+                <p className="font-bold dark:text-white">{metadata?.cols || "..."}</p>
               </div>
             </div>
 
@@ -222,12 +222,12 @@ export function FileUploader({ onSuccess }: FileUploaderProps) {
                 <p className="text-xs text-text-secondary mb-3">Header Preview</p>
                 <div className="flex flex-wrap gap-2">
                   {metadata.headers.slice(0, 5).map((header) => (
-                    <span key={header} className="px-2 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 text-[10px] font-medium">
+                    <span key={header} className="px-3 py-1 rounded-full bg-zinc-100/50 border border-zinc-200/30 text-[10px] font-semibold text-apple-text-secondary dark:bg-zinc-800/50 dark:border-zinc-700/30 dark:text-zinc-400">
                       {header}
                     </span>
                   ))}
                   {metadata.headers.length > 5 && (
-                    <span className="px-2 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 text-[10px] font-medium">
+                    <span className="px-3 py-1 rounded-full bg-apple-blue/5 border border-apple-blue/10 text-[10px] font-semibold text-apple-blue">
                       +{metadata.headers.length - 5} more
                     </span>
                   )}

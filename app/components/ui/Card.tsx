@@ -18,9 +18,10 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
         transition={{ duration: 0.4, ease: "easeOut" }}
         whileHover={{ y: -4, transition: { duration: 0.2 } }}
         className={cn(
-          "rounded-lg border border-zinc-200/50 dark:border-zinc-800/50 bg-white dark:bg-zinc-900 transition-all",
+          "rounded-2xl border border-zinc-200/50 bg-white shadow-card transition-all",
+          "dark:border-zinc-800/50 dark:bg-zinc-900 dark:shadow-none",
           isGlass && "glass",
-          isElevated ? "shadow-[0_12px_48px_rgba(0,0,0,0.12)]" : "shadow-[0_4px_16px_rgba(0,0,0,0.08)]",
+          isElevated && "shadow-elevated",
           className
         )}
         {...props}

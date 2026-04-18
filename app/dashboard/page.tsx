@@ -88,23 +88,30 @@ export default function Home() {
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden relative">
         {/* Header */}
-        <header className="h-16 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-8 bg-white/80 backdrop-blur-md z-10">
-          <div className="flex-1 max-w-xl">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#86868B] h-4 w-4" />
+        <header className="h-16 border-b border-zinc-200/50 flex items-center justify-between px-8 bg-white/70 backdrop-blur-xl z-30 dark:border-zinc-800/50 dark:bg-zinc-900/70">
+          <div className="flex-1 max-w-2xl mx-auto">
+            <div className="relative group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-apple-text-secondary h-4 w-4 transition-colors group-focus-within:text-apple-blue" />
               <Input
-                placeholder="Search analytics, reports..."
-                className="pl-10 bg-zinc-100/50 border-transparent focus-visible:bg-white rounded-full transition-all"
+                placeholder="Search analytics, datasets, or ask a question..."
+                className="pl-12 bg-zinc-100/50 border-transparent focus-visible:bg-white rounded-2xl transition-all shadow-none focus-visible:shadow-subtle"
               />
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center space-x-1">
+                <kbd className="hidden sm:inline-flex h-5 select-none items-center gap-1 rounded border border-zinc-200 bg-white px-1.5 font-mono text-[10px] font-medium text-zinc-500 opacity-100 dark:border-zinc-700 dark:bg-zinc-800">
+                  <span className="text-xs">⌘</span>K
+                </kbd>
+              </div>
             </div>
           </div>
-
-          <div className="flex items-center space-x-4">
-            <button className="p-2 text-apple-text-secondary hover:text-apple-text-primary transition-colors">
+ 
+          <div className="flex items-center space-x-3 ml-6">
+            <button className="h-10 w-10 flex items-center justify-center rounded-xl text-apple-text-secondary hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all hover:text-apple-text-primary relative">
               <Bell size={20} />
+              <span className="absolute top-2.5 right-2.5 h-2 w-2 rounded-full bg-apple-blue border-2 border-white dark:border-zinc-900" />
             </button>
-            <Button size="sm" className="rounded-full px-4 bg-[#0071E3] hover:bg-[#0077ED] shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-              <Plus size={16} className="mr-1" />
+            <div className="h-6 w-px bg-zinc-200 dark:bg-zinc-800 mx-2" />
+            <Button size="sm" className="rounded-xl px-5 py-2.5 bg-apple-blue hover:bg-apple-blue-bright text-white shadow-subtle font-semibold text-sm">
+              <Plus size={18} className="mr-2" />
               <span>New Analysis</span>
             </Button>
           </div>
@@ -120,12 +127,12 @@ export default function Home() {
                 exit={{ opacity: 0, y: -20 }}
                 className="h-full overflow-y-auto p-8 space-y-10"
               >
-                <header className="flex items-end justify-between">
-                  <div>
-                    <h1 className="text-[32px] font-bold tracking-tight text-apple-text-primary">Dashboard</h1>
-                    <p className="text-[#86868B] text-lg">Upload your data to start AI-powered analysis.</p>
+                <header className="flex items-center justify-between">
+                  <div className="space-y-1">
+                    <h1 className="text-[34px] font-bold tracking-tight text-apple-text-primary dark:text-white">Dashboard</h1>
+                    <p className="text-apple-text-secondary text-lg">Upload your data to start AI-powered analysis.</p>
                   </div>
-                  <div className="w-48">
+                  <div className="w-56">
                     <Select
                       options={ranges}
                       value={selectedRange}
@@ -133,16 +140,21 @@ export default function Home() {
                     />
                   </div>
                 </header>
-
-                <section className="bg-white p-10 rounded-[28px] shadow-card border border-gray-100 text-center max-w-4xl mx-auto">
-                  <div className="mb-8">
-                    <h2 className="text-2xl font-bold mb-2">Ready to explore?</h2>
-                    <p className="text-apple-text-secondary">Drag and drop your CSV file below to begin the magic.</p>
+ 
+                <section className="bg-white/50 backdrop-blur-sm p-12 rounded-[32px] border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.04)] text-center max-w-4xl mx-auto dark:bg-zinc-900/50 dark:border-zinc-800/50">
+                  <div className="mb-10">
+                    <div className="h-16 w-16 bg-apple-blue/10 rounded-2xl flex items-center justify-center mx-auto mb-6 text-apple-blue">
+                      <Plus size={32} />
+                    </div>
+                    <h2 className="text-[28px] font-bold mb-3 tracking-tight dark:text-white">Ready to explore?</h2>
+                    <p className="text-apple-text-secondary text-lg">Drag and drop your CSV file below to begin the magic.</p>
                   </div>
-                  <FileUploader onSuccess={handleFileUploadSuccess} />
+                  <div className="max-w-xl mx-auto">
+                    <FileUploader onSuccess={handleFileUploadSuccess} />
+                  </div>
                 </section>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+ 
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <StatCard title="Total Files" value="12" trend="+2" trendUp={true} />
                   <StatCard title="AI Queries" value="1,482" trend="+12%" trendUp={true} />
                   <StatCard title="System Load" value="12%" trend="-5%" trendUp={false} />
@@ -214,16 +226,16 @@ function NavItem({
 
 function StatCard({ title, value, trend, trendUp }: { title: string; value: string; trend: string; trendUp: boolean }) {
   return (
-    <Card className="rounded-2xl border-none shadow-sm bg-white">
-      <CardContent className="p-6">
-        <p className="text-[11px] font-bold text-apple-text-secondary uppercase tracking-widest">{title}</p>
-        <div className="flex items-end justify-between mt-2">
-          <h2 className="text-3xl font-bold">{value}</h2>
+    <Card className="rounded-2xl border-none shadow-[0_4px_24px_rgba(0,0,0,0.03)] bg-white dark:bg-zinc-900/50">
+      <CardContent className="p-8">
+        <p className="text-[11px] font-bold text-apple-text-secondary uppercase tracking-[0.1em]">{title}</p>
+        <div className="flex items-end justify-between mt-3">
+          <h2 className="text-[34px] font-bold tracking-tight text-apple-text-primary dark:text-white leading-none">{value}</h2>
           <div className={cn(
-            "flex items-center text-[11px] font-bold px-2 py-0.5 rounded-full",
+            "flex items-center text-[13px] font-bold px-3 py-1 rounded-full",
             trendUp ? "text-success bg-success/10" : "text-error bg-error/10"
           )}>
-            <TrendingUp size={12} className={cn("mr-1", !trendUp && "rotate-180")} />
+            <TrendingUp size={14} className={cn("mr-1", !trendUp && "rotate-180")} />
             {trend}
           </div>
         </div>

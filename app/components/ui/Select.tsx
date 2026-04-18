@@ -35,14 +35,15 @@ export function Select({ options, value, onChange, placeholder = "Select...", cl
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "flex h-10 w-full items-center justify-between rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-2 text-sm shadow-sm ring-offset-white focus:outline-none focus:ring-2 focus:ring-[#0071E3]/50 transition-all duration-200",
-          isOpen && "border-[#0071E3] ring-2 ring-[#0071E3]/50"
+          "flex h-10 w-full items-center justify-between rounded-xl border border-zinc-200/50 bg-zinc-100/30 px-4 py-2 text-sm transition-all duration-300 hover:bg-zinc-100/50 focus:outline-none focus:ring-2 focus:ring-apple-blue/20",
+          "dark:border-zinc-800/50 dark:bg-zinc-900/30 dark:hover:bg-zinc-900/50",
+          isOpen && "border-apple-blue ring-2 ring-apple-blue/20"
         )}
       >
-        <span className={cn("truncate", !selectedOption && "text-zinc-500")}>
+        <span className={cn("truncate font-medium", !selectedOption && "text-zinc-400")}>
           {selectedOption ? selectedOption.label : placeholder}
         </span>
-        <ChevronDown className={cn("h-4 w-4 opacity-50 transition-transform duration-200", isOpen && "rotate-180")} />
+        <ChevronDown className={cn("h-4 w-4 text-zinc-400 transition-transform duration-300", isOpen && "rotate-180")} />
       </button>
 
       <AnimatePresence>
