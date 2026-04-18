@@ -6,6 +6,7 @@ import { Button } from "@/app/components/ui/Button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/ui/Card";
 import { Input } from "@/app/components/ui/Input";
 import { Select } from "@/app/components/ui/Select";
+import { FileUploader } from "@/app/components/ui/FileUploader";
 import { motion } from "framer-motion";
 import { 
   BarChart3, 
@@ -89,7 +90,7 @@ export default function Home() {
         </header>
 
         {/* Scrollable area */}
-        <div className="flex-1 overflow-y-auto p-8 space-y-8">
+        <div className="flex-1 overflow-y-auto p-8 space-y-10">
           <header className="flex items-end justify-between">
             <div>
               <h1 className="text-2xl font-bold tracking-tight">Dashboard Overview</h1>
@@ -103,6 +104,15 @@ export default function Home() {
               />
             </div>
           </header>
+
+          {/* Upload Section */}
+          <section>
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold">Analyze New Data</h2>
+              <p className="text-sm text-text-secondary">Upload a CSV file to generate AI-powered insights.</p>
+            </div>
+            <FileUploader />
+          </section>
 
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
