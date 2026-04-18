@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Bot, User, AlertCircle, Table, Check } from "lucide-react";
-import ChartCard from "../ui/ChartCard";
+import { ChartCard } from "../ui/ChartCard";
 
 export interface Message {
   id: string;

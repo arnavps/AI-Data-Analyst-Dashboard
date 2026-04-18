@@ -36,32 +36,37 @@ class AIService {
     const systemPrompt = `
 You are a data analysis expert. Convert natural language questions into structured query objects.
 
-Available data columns: ${columns.join(", ")}
-Data types: ${JSON.stringify(types)}
-Sample data (top 5 rows): ${JSON.stringify(preview)}
+Available data columns: ${JSON.stringify(dataSchema.columns)}
+Data types: ${JSON.stringify(dataSchema.types)}
+Sample data: ${JSON.stringify(dataSchema.preview)}
 
 When given a question, respond with a JSON object:
 {
-  "operation": "aggregation|filter|sort|top|trend",
-  "column": "column_name",
+  "operation": "aggregation|filter|sort|top|trend|stats",
+  "column": "column_name_for_metric",
   "metric": "sum|avg|count|max|min",
-  "groupBy": "column_name",
+  "groupBy": "column_name_for_grouping",
   "limit": number,
-  "filter": { "column": "value" },
-  "chartType": "line|bar|pie",
+  "filter": [
+    { "column": "name", "operator": "equals|greater|less|contains", "value": "val" }
+  ],
+  "chartType": "bar|area|pie|scatter|composed|funnel",
   "visualization": {
-    "type": "chart_type",
-    "xAxis": "column",
-    "yAxis": "column"
+    "xAxis": "column_name",
+    "yAxis": "column_name",
+    "color": "hex_code"
   }
 }
 
-Examples:
-Q: "Show monthly sales trend"
-A: { "operation": "trend", "column": "date", "groupBy": "month", "metric": "sum", "chartType": "line", "visualization": { "type": "line", "xAxis": "month", "yAxis": "sales" } }
+Chart Selection Rules:
+- bar: Use for comparisons between categories.
+- area: Use for trends over time.
+- pie: Use for parts-of-a-whole (max 6 categories).
+- scatter: Use for correlation between two numerical columns.
+- composed: Use for trends where you want to show both actual values (bars) and a moving average/trend line (line).
+- funnel: Use for sequential stages or conversion flows.
 
-Q: "Top 5 products by revenue"
-A: { "operation": "top", "column": "product", "metric": "sum", "limit": 5, "chartType": "bar", "visualization": { "type": "bar", "xAxis": "product", "yAxis": "revenue" } }
+Always return valid JSON. If the question is purely informational, use operation: "stats".
 `;
 
     try {

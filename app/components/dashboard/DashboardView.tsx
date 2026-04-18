@@ -28,30 +28,61 @@ export function DashboardView({ metadata, onNewAnalysis, onSwitchToChat }: Dashb
   // Mock charts for demonstration
   const charts = [
     {
-      title: "Revenue by Region",
-      type: "bar" as const,
+      title: "Revenue vs Forecast",
+      subtitle: "$1.2M",
+      type: "composed",
+      dataKey: "revenue",
+      categoryKey: "month",
+      color: "#0071E3",
       data: [
-        { name: "North", value: 45000 },
-        { name: "South", value: 32000 },
-        { name: "East", value: 28000 },
-        { name: "West", value: 39000 }
-      ],
-      dataKey: "value",
-      categoryKey: "name"
+        { month: "Jan", revenue: 4000, forecast: 4200 },
+        { month: "Feb", revenue: 3000, forecast: 3100 },
+        { month: "Mar", revenue: 5000, forecast: 4800 },
+        { month: "Apr", revenue: 2780, forecast: 3000 },
+        { month: "May", revenue: 1890, forecast: 2000 },
+        { month: "Jun", revenue: 2390, forecast: 2500 },
+      ]
     },
     {
-      title: "User Acquisition Trend",
-      type: "area" as const,
-      data: [
-        { month: "Jan", users: 1200 },
-        { month: "Feb", users: 1900 },
-        { month: "Mar", users: 1500 },
-        { month: "Apr", users: 2400 },
-        { month: "May", users: 2100 },
-        { month: "Jun", users: 3000 }
-      ],
+      title: "Customer Acquisition",
+      subtitle: "12,402",
+      type: "area",
       dataKey: "users",
-      categoryKey: "month"
+      categoryKey: "month",
+      color: "#34C759",
+      showBrush: true,
+      data: [
+        { month: "Jan", users: 1000 },
+        { month: "Feb", users: 2000 },
+        { month: "Mar", users: 1500 },
+        { month: "Apr", users: 3000 },
+        { month: "May", users: 2500 },
+        { month: "Jun", users: 4000 },
+      ]
+    },
+    {
+      title: "Market Correlation",
+      subtitle: "Strong",
+      type: "scatter",
+      dataKey: "sales",
+      categoryKey: "ads",
+      color: "#5856D6",
+      data: [
+        { ads: 100, sales: 200 },
+        { ads: 200, sales: 400 },
+        { ads: 300, sales: 350 },
+        { ads: 400, sales: 500 },
+        { ads: 500, sales: 650 },
+      ]
+    },
+    {
+      title: "Conversion Goal",
+      subtitle: "65%",
+      type: "gauge",
+      dataKey: "value",
+      categoryKey: "label",
+      color: "#FF9500",
+      data: [{ label: "Target", value: 65 }]
     }
   ];
 
@@ -77,10 +108,13 @@ export function DashboardView({ metadata, onNewAnalysis, onSwitchToChat }: Dashb
               >
                 <ChartCard 
                   title={chart.title}
-                  type={chart.type}
+                  subtitle={chart.subtitle}
+                  type={chart.type as any}
                   data={chart.data}
                   dataKey={chart.dataKey}
                   categoryKey={chart.categoryKey}
+                  color={chart.color}
+                  showBrush={chart.showBrush}
                   className="h-[350px]"
                 />
               </motion.div>

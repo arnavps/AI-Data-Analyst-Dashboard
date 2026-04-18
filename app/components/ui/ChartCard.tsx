@@ -13,20 +13,39 @@ import {
   Bar,
   Cell,
   PieChart,
-  Pie
+  Pie,
+  ScatterChart,
+  Scatter,
+  ZAxis,
+  ComposedChart,
+  Line,
+  Brush,
+  ReferenceLine,
+  FunnelChart,
+  Funnel,
+  LabelList
 } from "recharts";
 import { cn } from "@/app/lib/utils";
-import { MoreHorizontal, Info } from "lucide-react";
+import { 
+  MoreHorizontal, 
+  Info, 
+  Maximize2, 
+  Download, 
+  Share2, 
+  Settings2,
+  Table as TableIcon
+} from "lucide-react";
 
 interface ChartCardProps {
   title: string;
   subtitle?: string;
   data: any[];
-  type: "area" | "bar" | "pie";
+  type: "area" | "bar" | "pie" | "scatter" | "composed" | "funnel" | "gauge";
   dataKey: string;
   categoryKey: string;
   className?: string;
   color?: string;
+  showBrush?: boolean;
 }
 
 export function ChartCard({
@@ -37,16 +56,41 @@ export function ChartCard({
   dataKey = "value",
   categoryKey = "name",
   className,
-  color = "#0071E3"
+  color: initialColor = "#0071E3",
+  showBrush: initialShowBrush = false
 }: ChartCardProps) {
+  const [activeTab, setActiveTab] = React.useState<"chart" | "table">("chart");
+  const [color, setColor] = React.useState(initialColor);
+  const [showBrush, setShowBrush] = React.useState(initialShowBrush);
+  const [showLabels, setShowLabels] = React.useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
+
+  const exportCSV = () => {
+    if (!data || data.length === 0) return;
+    const headers = Object.keys(data[0]);
+    const csvContent = [
+      headers.join(","),
+      ...data.map(row => headers.map(h => `"${row[h]}"`).join(","))
+    ].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute("download", `${title.toLowerCase().replace(/\s+/g, "_")}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="glass p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-xl">
+        <div className="glass p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-xl z-50">
           <p className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-1">{label}</p>
-          <p className="text-lg font-bold text-text-primary">
-            {payload[0].value.toLocaleString()}
-          </p>
+          {payload.map((entry: any, index: number) => (
+            <p key={index} className="text-lg font-bold" style={{ color: entry.color || color }}>
+              {entry.value.toLocaleString()}
+            </p>
+          ))}
         </div>
       );
     }
@@ -59,67 +103,102 @@ export function ChartCard({
         return (
           <AreaChart data={data}>
             <defs>
-              <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id={`gradient-${title}`} x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor={color} stopOpacity={0.3} />
                 <stop offset="95%" stopColor={color} stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#E5E5E7" className="dark:stroke-zinc-800" />
-            <XAxis 
-              dataKey={categoryKey} 
-              axisLine={false} 
-              tickLine={false} 
-              tick={{ fontSize: 10, fill: "#86868B" }} 
-              dy={10}
-            />
-            <YAxis 
-              hide 
-              domain={["auto", "auto"]}
-            />
+            <XAxis dataKey={categoryKey} axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#86868B" }} dy={10} />
+            <YAxis hide domain={["auto", "auto"]} />
             <Tooltip content={<CustomTooltip />} />
-            <Area
-              type="monotone"
-              dataKey={dataKey}
-              stroke={color}
-              strokeWidth={3}
-              fillOpacity={1}
-              fill="url(#colorGradient)"
-              animationDuration={1500}
-            />
+            <Area type="monotone" dataKey={dataKey} stroke={color} strokeWidth={3} fillOpacity={1} fill={`url(#gradient-${title})`} animationDuration={1500}>
+              {showLabels && <LabelList dataKey={dataKey} position="top" offset={10} style={{ fontSize: 10, fill: color }} />}
+            </Area>
+            {showBrush && <Brush dataKey={categoryKey} height={30} stroke={color} fill="#FBFBFD" />}
           </AreaChart>
         );
       case "bar":
         return (
           <BarChart data={data}>
             <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#E5E5E7" className="dark:stroke-zinc-800" />
-            <XAxis 
-              dataKey={categoryKey} 
-              axisLine={false} 
-              tickLine={false} 
-              tick={{ fontSize: 10, fill: "#86868B" }} 
-              dy={10}
-            />
+            <XAxis dataKey={categoryKey} axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#86868B" }} dy={10} />
             <YAxis hide />
             <Tooltip content={<CustomTooltip />} />
-            <Bar 
-              dataKey={dataKey} 
-              fill={color} 
-              radius={[6, 6, 0, 0]} 
-              animationDuration={1500}
-            />
+            <Bar dataKey={dataKey} fill={color} radius={[6, 6, 0, 0]} animationDuration={1500}>
+              {showLabels && <LabelList dataKey={dataKey} position="top" style={{ fontSize: 10, fill: color }} />}
+            </Bar>
           </BarChart>
+        );
+      case "scatter":
+        return (
+          <ScatterChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E5E7" />
+            <XAxis dataKey={categoryKey} type="category" axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
+            <YAxis dataKey={dataKey} type="number" axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
+            <ZAxis range={[60, 400]} />
+            <Tooltip content={<CustomTooltip />} />
+            <Scatter name={title} data={data} fill={color} animationDuration={1500}>
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fillOpacity={0.6} strokeWidth={2} stroke={color} />
+              ))}
+            </Scatter>
+          </ScatterChart>
+        );
+      case "composed":
+        return (
+          <ComposedChart data={data}>
+            <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#E5E5E7" />
+            <XAxis dataKey={categoryKey} axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
+            <YAxis hide />
+            <Tooltip content={<CustomTooltip />} />
+            <Bar dataKey={dataKey} fill={color} radius={[4, 4, 0, 0]} barSize={20} />
+            <Line type="monotone" dataKey={dataKey} stroke="#FF2D55" strokeWidth={3} dot={{ r: 4, fill: "#FF2D55" }} />
+          </ComposedChart>
+        );
+      case "funnel":
+        return (
+          <FunnelChart>
+            <Tooltip content={<CustomTooltip />} />
+            <Funnel dataKey={dataKey} data={data} isAnimationActive>
+              <LabelList position="right" fill="#86868B" stroke="none" dataKey={categoryKey} />
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={[color, "#34C759", "#5856D6", "#FF9500", "#FF2D55"][index % 5]} />
+              ))}
+            </Funnel>
+          </FunnelChart>
+        );
+      case "gauge":
+        const total = 100;
+        const value = data[0]?.[dataKey] || 0;
+        const gaugeData = [
+          { name: "Value", value: value, fill: color },
+          { name: "Remaining", value: total - value, fill: "#F5F5F7" }
+        ];
+        return (
+          <PieChart>
+            <Pie
+              data={gaugeData}
+              cx="50%"
+              cy="80%"
+              startAngle={180}
+              endAngle={0}
+              innerRadius={80}
+              outerRadius={100}
+              dataKey="value"
+              stroke="none"
+              animationDuration={1500}
+            >
+              <Cell key="cell-0" fill={color} />
+              <Cell key="cell-1" fill="#F5F5F7" className="dark:fill-zinc-800" />
+            </Pie>
+            <Tooltip />
+          </PieChart>
         );
       case "pie":
         return (
           <PieChart>
-            <Pie
-              data={data}
-              innerRadius={60}
-              outerRadius={80}
-              paddingAngle={5}
-              dataKey={dataKey}
-              animationDuration={1500}
-            >
+            <Pie data={data} innerRadius={60} outerRadius={80} paddingAngle={5} dataKey={dataKey} animationDuration={1500}>
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={[color, "#34C759", "#5856D6", "#FF9500", "#FF2D55"][index % 5]} />
               ))}
@@ -132,31 +211,133 @@ export function ChartCard({
     }
   };
 
+  const renderTable = () => {
+    if (!data || data.length === 0) return null;
+    const keys = Object.keys(data[0]);
+    return (
+      <div className="overflow-auto max-h-[250px] scrollbar-hide">
+        <table className="w-full text-left text-xs">
+          <thead className="sticky top-0 bg-white dark:bg-zinc-950 z-10">
+            <tr>
+              {keys.map(key => (
+                <th key={key} className="p-2 border-b border-zinc-100 dark:border-zinc-800 font-semibold text-text-secondary uppercase tracking-wider">
+                  {key}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((row, i) => (
+              <tr key={i} className="hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors">
+                {keys.map(key => (
+                  <td key={key} className="p-2 border-b border-zinc-50 dark:border-zinc-900 text-text-primary">
+                    {String(row[key])}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
   return (
-    <div className={cn("glass p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col h-full", className)}>
+    <div className={cn("glass p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col h-full group", className)}>
       <div className="flex items-center justify-between mb-6">
         <div>
           <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider">{title}</h3>
           {subtitle && <p className="text-2xl font-bold mt-1 tracking-tight">{subtitle}</p>}
         </div>
-        <button className="text-zinc-400 hover:text-text-primary transition-colors">
-          <MoreHorizontal size={20} />
-        </button>
-      </div>
-
-      <div className="flex-1 w-full min-h-[200px]">
-        <ResponsiveContainer width="100%" height="100%">
-          {renderChart()}
-        </ResponsiveContainer>
-      </div>
-
-      <div className="mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-900 flex items-center justify-between text-xs text-text-secondary">
-        <div className="flex items-center space-x-1">
-          <Info size={12} />
-          <span>Updated 5m ago</span>
+        
+        <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button 
+            onClick={() => setActiveTab(activeTab === "chart" ? "table" : "chart")}
+            className={cn("p-1.5 rounded-lg transition-colors", activeTab === "table" ? "bg-apple-blue/10 text-apple-blue" : "hover:bg-zinc-100 dark:hover:bg-zinc-900")}
+          >
+            <TableIcon size={16} />
+          </button>
+          <button 
+            onClick={exportCSV}
+            className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-lg transition-colors text-zinc-500"
+          >
+            <Download size={16} />
+          </button>
+          <button 
+            onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+            className={cn("p-1.5 rounded-lg transition-colors", isSettingsOpen ? "bg-apple-blue/10 text-apple-blue" : "hover:bg-zinc-100 dark:hover:bg-zinc-900")}
+          >
+            <Settings2 size={16} />
+          </button>
+          <button className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-lg transition-colors text-zinc-500">
+            <Maximize2 size={16} />
+          </button>
         </div>
-        <button className="hover:text-apple-blue transition-colors">View Report</button>
+      </div>
+
+      {isSettingsOpen && (
+        <motion.div 
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          className="mb-4 p-3 bg-zinc-50 dark:bg-zinc-900/50 rounded-xl border border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-[10px]"
+        >
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <span className="text-text-secondary uppercase">Color:</span>
+              <div className="flex space-x-1">
+                {["#0071E3", "#34C759", "#FF2D55", "#5856D6", "#FF9500"].map(c => (
+                  <button 
+                    key={c} 
+                    onClick={() => setColor(c)}
+                    className={cn("w-3 h-3 rounded-full transition-transform", color === c ? "scale-125 ring-2 ring-white" : "hover:scale-110")}
+                    style={{ backgroundColor: c }}
+                  />
+                ))}
+              </div>
+            </div>
+            <label className="flex items-center space-x-2 cursor-pointer">
+              <input type="checkbox" checked={showBrush} onChange={e => setShowBrush(e.target.checked)} className="accent-apple-blue" />
+              <span className="text-text-secondary uppercase">Range Brush</span>
+            </label>
+            <label className="flex items-center space-x-2 cursor-pointer">
+              <input type="checkbox" checked={showLabels} onChange={e => setShowLabels(e.target.checked)} className="accent-apple-blue" />
+              <span className="text-text-secondary uppercase">Labels</span>
+            </label>
+          </div>
+          <button onClick={() => setIsSettingsOpen(false)} className="text-apple-blue font-semibold uppercase">Done</button>
+        </motion.div>
+      )}
+
+      <div className="flex-1 w-full min-h-[220px]">
+        {activeTab === "chart" ? (
+          <ResponsiveContainer width="100%" height="100%">
+            {renderChart()}
+          </ResponsiveContainer>
+        ) : (
+          renderTable()
+        )}
+      </div>
+
+      <div className="mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-900 flex items-center justify-between text-[10px] text-text-secondary">
+        <div className="flex items-center space-x-1">
+          <Settings2 size={10} />
+          <span>Auto-configured visualization</span>
+        </div>
+        <div className="flex items-center space-x-3">
+          <span className="flex items-center space-x-1">
+            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
+            <span>{dataKey}</span>
+          </span>
+          {type === "composed" && (
+            <span className="flex items-center space-x-1">
+              <div className="w-2 h-2 rounded-full bg-[#FF2D55]" />
+              <span>Trend</span>
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );
 }
+
+export default ChartCard;

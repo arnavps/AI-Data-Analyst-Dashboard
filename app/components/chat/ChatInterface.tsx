@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import ChatMessage, { Message } from "./ChatMessage";
 import ChatInput from "./ChatInput";
-import ChartCard from "../ui/ChartCard";
+import { ChartCard } from "../ui/ChartCard";
 import { InsightSection } from "../insights/InsightSection";
 
 interface ChatInterfaceProps {
