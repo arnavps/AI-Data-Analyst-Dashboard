@@ -41,8 +41,16 @@ export const MetricGrid = React.memo(function MetricGrid({ metadata }: MetricGri
       .filter(([_, type]) => type === 'number')
       .map(([col, _]) => col);
 
-    return numericalCols.slice(0, 4).map((col, i) => {
+    const otherCols = Object.entries(metadata.columnTypes)
+      .filter(([_, type]) => type !== 'number')
+      .map(([col, _]) => col);
+
+    // Combine them, preferring numerical
+    const displayCols = [...numericalCols, ...otherCols].slice(0, 4);
+
+    return displayCols.map((col, i) => {
       const stats = metadata.stats[col];
+      const isNumber = metadata.columnTypes[col] === 'number';
       const colors = ["#0071E3", "#34C759", "#FF9500", "#5856D6"];
       const icons = [
         <DollarSign className="text-[#0071E3]" size={20} />,
@@ -52,13 +60,17 @@ export const MetricGrid = React.memo(function MetricGrid({ metadata }: MetricGri
       ];
 
       return {
-        title: `Avg ${col}`,
-        value: stats.avg,
-        format: (val) => typeof val === 'number' ? val.toLocaleString(undefined, { maximumFractionDigits: 2 }) : val,
-        trend: "Live Data",
+        title: isNumber ? `Avg ${col}` : `Unique ${col}`,
+        value: isNumber ? (stats?.avg || 0) : (stats?.uniqueCount || 0),
+        format: (val) => typeof val === 'number' ? val.toLocaleString(undefined, { 
+          maximumFractionDigits: isNumber ? 2 : 0 
+        }) : val,
+        trend: isNumber ? "Live Stats" : "Distribution",
         trendUp: true,
         icon: icons[i % icons.length],
-        data: metadata.preview.map((row: any) => ({ val: row[col] || 0 }))
+        data: isNumber 
+          ? metadata.preview.map((row: any) => ({ val: row[col] || 0 }))
+          : metadata.preview.map((row: any, idx: number) => ({ val: idx % 5 + 2 })) // Simple mock trend for strings
       };
     });
   }, [metadata]);

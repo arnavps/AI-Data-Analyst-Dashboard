@@ -26,22 +26,22 @@ import {
 export default function Home() {
   const [selectedRange, setSelectedRange] = useState("last-30");
   const [activeFile, setActiveFile] = useState<{ id: string; metadata: any } | null>(null);
-  const [viewMode, setViewMode] = useState<"chat" | "dashboard">("dashboard");
-
+  const [viewMode, setViewMode] = useState<"chat" | "dashboard" | "vault" | "team" | "settings">("dashboard");
+ 
   const ranges = [
     { label: "Last 7 Days", value: "last-7" },
     { label: "Last 30 Days", value: "last-30" },
     { label: "Last 3 Months", value: "last-90" },
     { label: "Year to Date", value: "ytd" },
   ];
-
+ 
   const handleFileUploadSuccess = (result: any) => {
     setActiveFile({
       id: result.fileId,
       metadata: result
     });
   };
-
+ 
   return (
     <div className="flex h-screen bg-[#FBFBFD] overflow-hidden text-[#1D1D1F]">
       {/* Sidebar */}
@@ -54,7 +54,7 @@ export default function Home() {
             <span className="text-lg font-bold tracking-tight">AI Analyst</span>
           </div>
         </div>
-
+ 
         <nav className="flex-1 px-4 space-y-1">
           <NavItem
             icon={<LayoutDashboard size={18} />}
@@ -69,11 +69,26 @@ export default function Home() {
             onClick={() => setViewMode("chat")}
             disabled={!activeFile}
           />
-          <NavItem icon={<BarChart3 size={18} />} label="Data Vault" />
-          <NavItem icon={<Users size={18} />} label="Team" />
-          <NavItem icon={<Settings size={18} />} label="Preferences" />
+          <NavItem 
+            icon={<BarChart3 size={18} />} 
+            label="Data Vault" 
+            active={viewMode === "vault"}
+            onClick={() => setViewMode("vault")}
+          />
+          <NavItem 
+            icon={<Users size={18} />} 
+            label="Team" 
+            active={viewMode === "team"}
+            onClick={() => setViewMode("team")}
+          />
+          <NavItem 
+            icon={<Settings size={18} />} 
+            label="Preferences" 
+            active={viewMode === "settings"}
+            onClick={() => setViewMode("settings")}
+          />
         </nav>
-
+ 
         <div className="p-4 border-t border-zinc-200 dark:border-zinc-800">
           <div className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer">
             <div className="h-8 w-8 rounded-full bg-gradient-to-br from-zinc-300 to-zinc-400 overflow-hidden shadow-inner" />
@@ -84,7 +99,7 @@ export default function Home() {
           </div>
         </div>
       </aside>
-
+ 
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden relative">
         {/* Header */}
@@ -116,12 +131,12 @@ export default function Home() {
             </Button>
           </div>
         </header>
-
+ 
         <div className="flex-1 overflow-hidden">
           <AnimatePresence mode="wait">
-            {!activeFile ? (
+            {!activeFile && viewMode === "dashboard" ? (
               <motion.div
-                key="dashboard"
+                key="dashboard-empty"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -168,7 +183,40 @@ export default function Home() {
                 exit={{ opacity: 0, scale: 0.98 }}
                 className="h-full p-4"
               >
-                <ChatInterface fileId={activeFile.id} metadata={activeFile.metadata} />
+                {activeFile ? (
+                  <ChatInterface fileId={activeFile.id} metadata={activeFile.metadata} />
+                ) : (
+                  <div className="h-full flex flex-col items-center justify-center text-center p-8">
+                    <MessageSquare size={48} className="text-apple-blue mb-4 opacity-20" />
+                    <h2 className="text-xl font-bold mb-2">No active analysis</h2>
+                    <p className="text-apple-text-secondary max-w-md">Please upload a file in the Dashboard view to start chatting with the AI Analyst.</p>
+                    <Button onClick={() => setViewMode("dashboard")} variant="outline" className="mt-6">Go to Dashboard</Button>
+                  </div>
+                )}
+              </motion.div>
+            ) : viewMode === "vault" ? (
+              <motion.div key="vault" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full p-8">
+                <div className="flex flex-col items-center justify-center h-full text-center border-2 border-dashed border-zinc-200 rounded-3xl">
+                  <BarChart3 size={48} className="text-apple-blue mb-4 opacity-20" />
+                  <h2 className="text-2xl font-bold mb-2">Data Vault</h2>
+                  <p className="text-apple-text-secondary max-w-sm">Manage your uploaded datasets, export reports, and view historical analysis.</p>
+                </div>
+              </motion.div>
+            ) : viewMode === "team" ? (
+              <motion.div key="team" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full p-8">
+                <div className="flex flex-col items-center justify-center h-full text-center border-2 border-dashed border-zinc-200 rounded-3xl">
+                  <Users size={48} className="text-apple-blue mb-4 opacity-20" />
+                  <h2 className="text-2xl font-bold mb-2">Team Management</h2>
+                  <p className="text-apple-text-secondary max-w-sm">Collaborate with your team members and manage access permissions.</p>
+                </div>
+              </motion.div>
+            ) : viewMode === "settings" ? (
+              <motion.div key="settings" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full p-8">
+                <div className="flex flex-col items-center justify-center h-full text-center border-2 border-dashed border-zinc-200 rounded-3xl">
+                  <Settings size={48} className="text-apple-blue mb-4 opacity-20" />
+                  <h2 className="text-2xl font-bold mb-2">Preferences</h2>
+                  <p className="text-apple-text-secondary max-w-sm">Configure your application settings, theme, and AI model preferences.</p>
+                </div>
               </motion.div>
             ) : (
               <motion.div
@@ -179,7 +227,7 @@ export default function Home() {
                 className="h-full"
               >
                 <DashboardView
-                  metadata={activeFile.metadata}
+                  metadata={activeFile?.metadata}
                   onNewAnalysis={() => setActiveFile(null)}
                   onSwitchToChat={() => setViewMode("chat")}
                 />

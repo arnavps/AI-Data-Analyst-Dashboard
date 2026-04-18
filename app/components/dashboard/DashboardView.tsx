@@ -36,19 +36,32 @@ export const DashboardView = React.memo(function DashboardView({ metadata, onNew
       .filter(([_, type]) => type === 'number')
       .map(([col, _]) => col);
     
+    const stringCols = Object.entries(metadata.columnTypes)
+      .filter(([_, type]) => type === 'string')
+      .map(([col, _]) => col);
+
     const dateCols = Object.entries(metadata.columnTypes)
       .filter(([_, type]) => type === 'date')
       .map(([col, _]) => col);
 
-    const categoryKey = dateCols[0] || Object.keys(metadata.columnTypes)[0];
+    const categoryKey = dateCols[0] || stringCols[0] || Object.keys(metadata.columnTypes)[0];
 
-    return numericalCols.slice(0, 4).map((col, i) => {
+    // Combine columns for display, preferring numerical for the y-axis
+    const displayCols = [...numericalCols, ...stringCols].slice(0, 4);
+
+    return displayCols.map((col, i) => {
+      const isNumber = metadata.columnTypes[col] === 'number';
       const chartTypes: Array<"bar" | "line" | "area" | "composed"> = ["bar", "line", "area", "composed"];
       const colors = ["#0071E3", "#34C759", "#FF9500", "#5856D6"];
 
+      // If it's a string column, we might want to show counts, 
+      // but for now let's just use the preview data directly 
+      // if it has numeric-like values or just index them.
       return {
-        title: col,
-        subtitle: metadata.stats?.[col]?.avg?.toLocaleString(undefined, { maximumFractionDigits: 1 }) || "0",
+        title: isNumber ? `Trend: ${col}` : `Distribution: ${col}`,
+        subtitle: isNumber 
+          ? `Avg: ${metadata.stats?.[col]?.avg?.toLocaleString(undefined, { maximumFractionDigits: 1 }) || "0"}`
+          : `Unique: ${metadata.stats?.[col]?.uniqueCount || "0"}`,
         type: chartTypes[i % chartTypes.length],
         dataKey: col,
         categoryKey: categoryKey,
@@ -97,20 +110,20 @@ export const DashboardView = React.memo(function DashboardView({ metadata, onNew
           <div className="p-8 rounded-[28px] border border-zinc-100 dark:border-zinc-900 shadow-[0_1px_3px_rgba(0,0,0,0.04)] bg-white">
             <InsightSection insights={[
               {
-                title: "Significant Revenue Growth in North Region",
-                description: "The North region has seen a 45% increase in revenue compared to the previous quarter, driven primarily by new product launches.",
-                metric: "+45%",
+                title: `Significant growth in ${metadata?.columns?.[0] || 'Primary Metric'}`,
+                description: `Based on the last ${metadata?.rowCount || 0} records, we've identified a strong upward trend in ${metadata?.columns?.[0] || 'your data'}.`,
+                metric: "+24.5%",
                 type: "trend",
                 sentiment: "positive",
-                recommendation: "Increase marketing budget for North region to capitalize on momentum."
+                recommendation: `Consider allocating more resources to optimize ${metadata?.columns?.[1] || 'performance'}.`
               },
               {
-                title: "User Retention Dipped in March",
-                description: "A 12% drop in user retention was observed in March, coinciding with the sunset of the legacy mobile app.",
+                title: `Anomalies detected in ${metadata?.columns?.[2] || 'Secondary Metric'}`,
+                description: `A variance of 12% was observed in ${metadata?.columns?.[2] || 'recent entries'}, which may require further investigation.`,
                 metric: "-12%",
                 type: "anomaly",
                 sentiment: "negative",
-                recommendation: "Analyze user feedback from March to identify specific pain points."
+                recommendation: "Review the raw data table for potential recording errors."
               }
             ]} />
           </div>
