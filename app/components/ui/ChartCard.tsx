@@ -349,4 +349,5 @@ export function ChartCard({
   );
 }
 
-export default ChartCard;
+export const MemoizedChartCard = React.memo(ChartCard);
+export default MemoizedChartCard;

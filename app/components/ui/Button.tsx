@@ -33,8 +33,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <motion.button
         ref={ref}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.95 }}
+        disabled={isLoading || props.disabled}
+        whileHover={{ scale: isLoading || props.disabled ? 1 : 1.02 }}
+        whileTap={{ scale: isLoading || props.disabled ? 1 : 0.95 }}
         transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
         className={cn(
           "relative inline-flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-apple-blue/50 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden",

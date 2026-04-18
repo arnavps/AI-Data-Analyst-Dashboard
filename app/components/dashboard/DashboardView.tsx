@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 import { MetricGrid } from "./MetricGrid";
 import { DashboardHeader } from "./DashboardHeader";
@@ -24,9 +24,9 @@ interface DashboardViewProps {
   onSwitchToChat?: () => void;
 }
 
-export function DashboardView({ metadata, onNewAnalysis, onSwitchToChat }: DashboardViewProps) {
+export const DashboardView = React.memo(function DashboardView({ metadata, onNewAnalysis, onSwitchToChat }: DashboardViewProps) {
   // Mock charts for demonstration
-  const charts = [
+  const charts = useMemo(() => [
     {
       title: "Revenue vs Forecast",
       subtitle: "$1.2M",
@@ -84,7 +84,7 @@ export function DashboardView({ metadata, onNewAnalysis, onSwitchToChat }: Dashb
       color: "#FF9500",
       data: [{ label: "Target", value: 65 }]
     }
-  ];
+  ], []);
 
   return (
     <div className="h-full overflow-y-auto p-8 space-y-8 bg-[#FBFBFD] scroll-smooth">
@@ -188,4 +188,4 @@ export function DashboardView({ metadata, onNewAnalysis, onSwitchToChat }: Dashb
       </motion.button>
     </div>
   );
-}
+});

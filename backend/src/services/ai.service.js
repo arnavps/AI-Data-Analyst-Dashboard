@@ -1,5 +1,7 @@
 const OpenAI = require("openai");
+const crypto = require('crypto');
 const logger = require("../utils/logger");
+const cacheService = require('./cache.service');
 
 class AIService {
   constructor() {
@@ -32,6 +34,14 @@ class AIService {
 
   async processNaturalLanguageQuery(question, dataSchema) {
     const { columns, types, preview } = dataSchema;
+
+    const cacheKey = `query:${crypto.createHash('md5').update(question + JSON.stringify(columns)).digest('hex')}`;
+    const cachedResponse = await cacheService.get(cacheKey);
+    
+    if (cachedResponse) {
+      logger.info('AI Service: Cache hit for query');
+      return cachedResponse;
+    }
 
     const systemPrompt = `
 You are a data analysis expert. Convert natural language questions into structured query objects.
@@ -84,6 +94,10 @@ Always return valid JSON. If the question is purely informational, use operation
 
       const content = JSON.parse(response.choices[0].message.content);
       logger.info("AI Service: Query processed successfully");
+      
+      // Cache the result for 1 hour
+      await cacheService.set(cacheKey, content, 3600);
+      
       return content;
     } catch (error) {
       logger.error("AI Service Error (processNaturalLanguageQuery):", error);
