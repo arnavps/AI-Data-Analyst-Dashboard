@@ -5,7 +5,13 @@ class AIService {
   constructor() {
     this.openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
+      baseURL: process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v1",
+      defaultHeaders: {
+        "HTTP-Referer": process.env.FRONTEND_URL || "http://localhost:3000",
+        "X-Title": "AI Data Analyst Dashboard",
+      }
     });
+    this.model = process.env.AI_MODEL || "google/gemini-2.0-flash-lite-preview-02-05:free";
   }
 
   /**
@@ -61,7 +67,7 @@ A: { "operation": "top", "column": "product", "metric": "sum", "limit": 5, "char
     try {
       const response = await this.withRetry(() =>
         this.openai.chat.completions.create({
-          model: "gpt-3.5-turbo",
+          model: this.model,
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: question },
@@ -92,7 +98,7 @@ Return a JSON array of strings. Each string should be a concise, actionable insi
     try {
       const response = await this.withRetry(() =>
         this.openai.chat.completions.create({
-          model: "gpt-3.5-turbo",
+          model: this.model,
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: "Generate insights for this data." },
