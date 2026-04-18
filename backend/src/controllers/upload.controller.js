@@ -39,7 +39,9 @@ exports.uploadFile = async (req, res, next) => {
         fileId,
         filename: metadata.filename,
         columns: metadata.columns,
+        columnTypes: metadata.columnTypes,
         rowCount: metadata.rowCount,
+        stats: metadata.stats,
         preview: metadata.preview
       },
       meta: {

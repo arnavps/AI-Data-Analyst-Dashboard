@@ -25,66 +25,38 @@ interface DashboardViewProps {
 }
 
 export const DashboardView = React.memo(function DashboardView({ metadata, onNewAnalysis, onSwitchToChat }: DashboardViewProps) {
-  // Mock charts for demonstration
-  const charts = useMemo(() => [
-    {
-      title: "Revenue vs Forecast",
-      subtitle: "$1.2M",
-      type: "composed",
-      dataKey: "revenue",
-      categoryKey: "month",
-      color: "#0071E3",
-      data: [
-        { month: "Jan", revenue: 4000, forecast: 4200 },
-        { month: "Feb", revenue: 3000, forecast: 3100 },
-        { month: "Mar", revenue: 5000, forecast: 4800 },
-        { month: "Apr", revenue: 2780, forecast: 3000 },
-        { month: "May", revenue: 1890, forecast: 2000 },
-        { month: "Jun", revenue: 2390, forecast: 2500 },
-      ]
-    },
-    {
-      title: "Customer Acquisition",
-      subtitle: "12,402",
-      type: "area",
-      dataKey: "users",
-      categoryKey: "month",
-      color: "#34C759",
-      showBrush: true,
-      data: [
-        { month: "Jan", users: 1000 },
-        { month: "Feb", users: 2000 },
-        { month: "Mar", users: 1500 },
-        { month: "Apr", users: 3000 },
-        { month: "May", users: 2500 },
-        { month: "Jun", users: 4000 },
-      ]
-    },
-    {
-      title: "Market Correlation",
-      subtitle: "Strong",
-      type: "scatter",
-      dataKey: "sales",
-      categoryKey: "ads",
-      color: "#5856D6",
-      data: [
-        { ads: 100, sales: 200 },
-        { ads: 200, sales: 400 },
-        { ads: 300, sales: 350 },
-        { ads: 400, sales: 500 },
-        { ads: 500, sales: 650 },
-      ]
-    },
-    {
-      title: "Conversion Goal",
-      subtitle: "65%",
-      type: "gauge",
-      dataKey: "value",
-      categoryKey: "label",
-      color: "#FF9500",
-      data: [{ label: "Target", value: 65 }]
+  // Generate real charts based on metadata
+  const charts = useMemo(() => {
+    if (!metadata || !metadata.columnTypes) {
+      // Default empty state charts
+      return [];
     }
-  ], []);
+
+    const numericalCols = Object.entries(metadata.columnTypes)
+      .filter(([_, type]) => type === 'number')
+      .map(([col, _]) => col);
+    
+    const dateCols = Object.entries(metadata.columnTypes)
+      .filter(([_, type]) => type === 'date')
+      .map(([col, _]) => col);
+
+    const categoryKey = dateCols[0] || Object.keys(metadata.columnTypes)[0];
+
+    return numericalCols.slice(0, 4).map((col, i) => {
+      const chartTypes: Array<"bar" | "line" | "area" | "composed"> = ["bar", "line", "area", "composed"];
+      const colors = ["#0071E3", "#34C759", "#FF9500", "#5856D6"];
+
+      return {
+        title: col,
+        subtitle: metadata.stats?.[col]?.avg?.toLocaleString(undefined, { maximumFractionDigits: 1 }) || "0",
+        type: chartTypes[i % chartTypes.length],
+        dataKey: col,
+        categoryKey: categoryKey,
+        color: colors[i % colors.length],
+        data: metadata.preview || []
+      };
+    });
+  }, [metadata]);
 
   return (
     <div className="h-full overflow-y-auto p-8 space-y-8 bg-[#FBFBFD] scroll-smooth">
@@ -92,7 +64,7 @@ export const DashboardView = React.memo(function DashboardView({ metadata, onNew
       <DashboardHeader filename={metadata?.filename} onNewAnalysis={onNewAnalysis} />
 
       {/* Main Stats Grid */}
-      <MetricGrid />
+      <MetricGrid metadata={metadata} />
 
       {/* Primary Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 import { TrendingUp, TrendingDown, Activity, DollarSign, Users, Package } from "lucide-react";
 import { cn } from "@/app/lib/utils";
@@ -17,50 +17,52 @@ interface Metric {
   data: any[];
 }
 
-const mockData = [
-  { val: 10 }, { val: 20 }, { val: 15 }, { val: 30 }, { val: 25 }, { val: 40 }
-];
+interface MetricGridProps {
+  metadata?: any;
+}
 
-const metrics: Metric[] = [
-  {
-    title: "Total Revenue",
-    value: 128430,
-    format: (val) => `$${Math.round(val).toLocaleString()}`,
-    trend: "+12.5%",
-    trendUp: true,
-    icon: <DollarSign className="text-[#0071E3]" size={20} />,
-    data: mockData
-  },
-  {
-    title: "Active Users",
-    value: 2842,
-    format: (val) => Math.round(val).toLocaleString(),
-    trend: "+5.2%",
-    trendUp: true,
-    icon: <Users className="text-[#34C759]" size={20} />,
-    data: mockData.map(d => ({ val: d.val * 0.8 }))
-  },
-  {
-    title: "Avg. Order Value",
-    value: 45.20,
-    format: (val) => `$${val.toFixed(2)}`,
-    trend: "-2.1%",
-    trendUp: false,
-    icon: <Package className="text-orange-500" size={20} />,
-    data: mockData.map(d => ({ val: 50 - d.val }))
-  },
-  {
-    title: "Conversion Rate",
-    value: 3.2,
-    format: (val) => `${val.toFixed(1)}%`,
-    trend: "+0.4%",
-    trendUp: true,
-    icon: <Activity className="text-purple-500" size={20} />,
-    data: mockData.map(d => ({ val: d.val * 1.2 }))
-  }
-];
+export const MetricGrid = React.memo(function MetricGrid({ metadata }: MetricGridProps) {
+  const metrics: Metric[] = useMemo(() => {
+    if (!metadata || !metadata.stats) {
+      return [
+        {
+          title: "Total Records",
+          value: metadata?.rowCount || 0,
+          format: (val) => val.toLocaleString(),
+          trend: "Ready",
+          trendUp: true,
+          icon: <Activity className="text-apple-blue" size={20} />,
+          data: [{ val: 10 }, { val: 20 }, { val: 30 }]
+        }
+      ];
+    }
 
-export const MetricGrid = React.memo(function MetricGrid() {
+    const numericalCols = Object.entries(metadata.columnTypes)
+      .filter(([_, type]) => type === 'number')
+      .map(([col, _]) => col);
+
+    return numericalCols.slice(0, 4).map((col, i) => {
+      const stats = metadata.stats[col];
+      const colors = ["#0071E3", "#34C759", "#FF9500", "#5856D6"];
+      const icons = [
+        <DollarSign className="text-[#0071E3]" size={20} />,
+        <Users className="text-[#34C759]" size={20} />,
+        <Package className="text-orange-500" size={20} />,
+        <Activity className="text-purple-500" size={20} />
+      ];
+
+      return {
+        title: `Avg ${col}`,
+        value: stats.avg,
+        format: (val) => typeof val === 'number' ? val.toLocaleString(undefined, { maximumFractionDigits: 2 }) : val,
+        trend: "Live Data",
+        trendUp: true,
+        icon: icons[i % icons.length],
+        data: metadata.preview.map((row: any) => ({ val: row[col] || 0 }))
+      };
+    });
+  }, [metadata]);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {metrics.map((metric, i) => (
@@ -87,7 +89,7 @@ export const MetricGrid = React.memo(function MetricGrid() {
           </div>
 
           <div>
-            <p className="text-[11px] font-bold text-[#86868B] uppercase tracking-widest">{metric.title}</p>
+            <p className="text-[11px] font-bold text-[#86868B] uppercase tracking-widest truncate">{metric.title}</p>
             <h2 className="text-3xl font-bold mt-1 tracking-tight">
               <CountUp value={metric.value} format={metric.format} />
             </h2>
