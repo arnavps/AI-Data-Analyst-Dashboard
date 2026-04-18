@@ -1,1 +1,4 @@
 {"level":"info","message":"Server is running on port 5000","timestamp":"2026-04-18T12:57:03.436Z"}
+{"level":"info","message":"::1 - - [18/Apr/2026:14:09:28 +0000] \"POST /api/query HTTP/1.1\" 404 42 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"","timestamp":"2026-04-18T14:09:28.998Z"}
+{"level":"info","message":"::1 - - [18/Apr/2026:14:16:16 +0000] \"POST /api/upload HTTP/1.1\" 200 1192 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"","timestamp":"2026-04-18T14:16:16.045Z"}
+{"level":"info","message":"::1 - - [18/Apr/2026:14:32:15 +0000] \"POST /api/upload HTTP/1.1\" 200 1191 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"","timestamp":"2026-04-18T14:32:15.965Z"}

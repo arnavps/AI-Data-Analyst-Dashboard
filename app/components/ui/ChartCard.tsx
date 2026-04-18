@@ -85,10 +85,10 @@ export function ChartCard({
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="glass p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-xl z-50">
-          <p className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-1">{label}</p>
+        <div className="glass p-4 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-elevated z-50">
+          <p className="text-[10px] font-bold text-apple-text-secondary uppercase tracking-[0.12em] mb-2 opacity-80">{label}</p>
           {payload.map((entry: any, index: number) => (
-            <p key={index} className="text-lg font-bold" style={{ color: entry.color || color }}>
+            <p key={index} className="text-xl font-bold dark:text-white" style={{ color: entry.color || color }}>
               {entry.value.toLocaleString()}
             </p>
           ))}
@@ -110,7 +110,7 @@ export function ChartCard({
               </linearGradient>
             </defs>
             <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#E5E5E7" className="dark:stroke-zinc-800" />
-            <XAxis dataKey={categoryKey} axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#86868B" }} dy={10} />
+            <XAxis dataKey={categoryKey} axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#A1A1A6" }} dy={10} />
             <YAxis hide domain={["auto", "auto"]} />
             <Tooltip content={<CustomTooltip />} />
             <Area type="monotone" dataKey={dataKey} stroke={color} strokeWidth={3} fillOpacity={1} fill={`url(#gradient-${title})`} animationDuration={1500}>
@@ -122,9 +122,9 @@ export function ChartCard({
       case "bar":
         return (
           <BarChart data={data}>
-            <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#E5E5E7" className="dark:stroke-zinc-800" />
-            <XAxis dataKey={categoryKey} axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#86868B" }} dy={10} />
-            <YAxis hide />
+            <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#E5E5E7" className="dark:stroke-white/5" />
+            <XAxis dataKey={categoryKey} axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#A1A1A6" }} dy={10} className="dark:fill-apple-text-secondary" />
+            <YAxis hide domain={["auto", "auto"]} />
             <Tooltip content={<CustomTooltip />} />
             <Bar dataKey={dataKey} fill={color} radius={[6, 6, 0, 0]} animationDuration={1500}>
               {showLabels && <LabelList dataKey={dataKey} position="top" style={{ fontSize: 10, fill: color }} />}
@@ -162,7 +162,7 @@ export function ChartCard({
           <FunnelChart>
             <Tooltip content={<CustomTooltip />} />
             <Funnel dataKey={dataKey} data={data} isAnimationActive>
-              <LabelList position="right" fill="#86868B" stroke="none" dataKey={categoryKey} />
+              <LabelList position="right" fill="#A1A1A6" stroke="none" dataKey={categoryKey} />
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={[color, "#34C759", "#5856D6", "#FF9500", "#FF2D55"][index % 5]} />
               ))}
@@ -218,10 +218,10 @@ export function ChartCard({
     return (
       <div className="overflow-auto max-h-[250px] scrollbar-hide">
         <table className="w-full text-left text-xs">
-          <thead className="sticky top-0 bg-white dark:bg-zinc-950 z-10">
+          <thead className="sticky top-0 bg-white dark:bg-apple-surface z-10">
             <tr>
               {keys.map(key => (
-                <th key={key} className="p-2 border-b border-zinc-100 dark:border-zinc-800 font-semibold text-text-secondary uppercase tracking-wider">
+                <th key={key} className="p-3 border-b border-zinc-100 dark:border-white/5 font-bold text-apple-text-secondary uppercase tracking-[0.1em]">
                   {key}
                 </th>
               ))}
@@ -229,9 +229,9 @@ export function ChartCard({
           </thead>
           <tbody>
             {data.map((row, i) => (
-              <tr key={i} className="hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors">
+              <tr key={i} className="hover:bg-zinc-50 dark:hover:bg-white/5 transition-colors">
                 {keys.map(key => (
-                  <td key={key} className="p-2 border-b border-zinc-50 dark:border-zinc-900 text-text-primary">
+                  <td key={key} className="p-3 border-b border-zinc-50 dark:border-white/5 text-apple-text-primary dark:text-zinc-200">
                     {String(row[key])}
                   </td>
                 ))}
@@ -252,10 +252,10 @@ export function ChartCard({
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
       className={cn("glass p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col h-full group transition-all", className)}
     >
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider">{title}</h3>
-          {subtitle && <p className="text-2xl font-bold mt-1 tracking-tight">{subtitle}</p>}
+          <h3 className="text-[11px] font-bold text-apple-text-secondary uppercase tracking-[0.12em] opacity-80">{title}</h3>
+          {subtitle && <p className="text-3xl font-bold mt-2 tracking-tight dark:text-white">{subtitle}</p>}
         </div>
         
         <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -326,20 +326,20 @@ export function ChartCard({
         )}
       </div>
 
-      <div className="mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-900 flex items-center justify-between text-[10px] text-text-secondary">
-        <div className="flex items-center space-x-1">
-          <Settings2 size={10} />
+      <div className="mt-6 pt-6 border-t border-zinc-100 dark:border-white/5 flex items-center justify-between text-[10px] text-apple-text-secondary font-medium">
+        <div className="flex items-center space-x-2 opacity-80">
+          <Settings2 size={12} className="text-apple-blue" />
           <span>Auto-configured visualization</span>
         </div>
-        <div className="flex items-center space-x-3">
-          <span className="flex items-center space-x-1">
-            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
-            <span>{dataKey}</span>
+        <div className="flex items-center space-x-4">
+          <span className="flex items-center space-x-2">
+            <div className="w-2.5 h-2.5 rounded-full shadow-sm" style={{ backgroundColor: color }} />
+            <span className="dark:text-zinc-300">{dataKey}</span>
           </span>
           {type === "composed" && (
-            <span className="flex items-center space-x-1">
-              <div className="w-2 h-2 rounded-full bg-[#FF2D55]" />
-              <span>Trend</span>
+            <span className="flex items-center space-x-2">
+              <div className="w-2.5 h-2.5 rounded-full bg-[#FF2D55] shadow-sm" />
+              <span className="dark:text-zinc-300">Trend</span>
             </span>
           )}
         </div>

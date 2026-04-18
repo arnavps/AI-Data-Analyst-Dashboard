@@ -85,24 +85,24 @@ export const MetricGrid = React.memo(function MetricGrid({ metadata }: MetricGri
           viewport={{ once: true, margin: "-20px" }}
           whileHover={{ y: -4, transition: { duration: 0.2 } }}
           transition={{ delay: i * 0.1, duration: 0.4, ease: "easeOut" }}
-          className="p-6 rounded-2xl border border-zinc-100 dark:border-zinc-900 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-shadow group bg-white/80 backdrop-blur-md"
+          className="p-8 rounded-[28px] border border-zinc-100 dark:border-white/5 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.06)] transition-all group bg-white/80 dark:bg-zinc-900/40 backdrop-blur-md"
         >
-          <div className="flex items-center justify-between mb-4">
-            <div className="p-2 rounded-xl bg-zinc-50 dark:bg-zinc-900 group-hover:scale-110 transition-transform">
+          <div className="flex items-center justify-between mb-6">
+            <div className="p-2.5 rounded-2xl bg-zinc-50 dark:bg-zinc-800 group-hover:scale-110 transition-transform">
               {metric.icon}
             </div>
             <div className={cn(
-              "flex items-center text-[11px] font-bold px-2 py-0.5 rounded-full",
+              "flex items-center text-[11px] font-bold px-3 py-1 rounded-full",
               metric.trendUp ? "text-[#34C759] bg-[#34C759]/10" : "text-[#FF3B30] bg-[#FF3B30]/10"
             )}>
-              {metric.trendUp ? <TrendingUp size={12} className="mr-1" /> : <TrendingDown size={12} className="mr-1" />}
+              {metric.trendUp ? <TrendingUp size={14} className="mr-1" /> : <TrendingDown size={14} className="mr-1" />}
               {metric.trend}
             </div>
           </div>
 
           <div>
-            <p className="text-[11px] font-bold text-[#86868B] uppercase tracking-widest truncate">{metric.title}</p>
-            <h2 className="text-3xl font-bold mt-1 tracking-tight">
+            <p className="text-[11px] font-bold text-apple-text-secondary uppercase tracking-[0.12em] truncate opacity-80">{metric.title}</p>
+            <h2 className="text-[36px] font-bold mt-2 tracking-tight dark:text-white leading-tight">
               <CountUp value={metric.value} format={metric.format} />
             </h2>
           </div>

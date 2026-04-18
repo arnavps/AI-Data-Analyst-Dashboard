@@ -66,13 +66,14 @@ export const DashboardView = React.memo(function DashboardView({ metadata, onNew
         dataKey: col,
         categoryKey: categoryKey,
         color: colors[i % colors.length],
-        data: metadata.preview || []
+        data: metadata.preview || [],
+        showBrush: true
       };
     });
   }, [metadata]);
 
   return (
-    <div className="h-full overflow-y-auto p-8 space-y-8 bg-[#FBFBFD] scroll-smooth">
+    <div className="h-full overflow-y-auto p-8 space-y-8 bg-apple-bg dark:bg-apple-bg-dark scroll-smooth transition-colors duration-500">
       {/* Top Header & Context */}
       <DashboardHeader filename={metadata?.filename} onNewAnalysis={onNewAnalysis} />
 
@@ -107,7 +108,7 @@ export const DashboardView = React.memo(function DashboardView({ metadata, onNew
           </div>
 
           {/* Large Insight Section */}
-          <div className="p-8 rounded-[28px] border border-zinc-100 dark:border-zinc-900 shadow-[0_1px_3px_rgba(0,0,0,0.04)] bg-white">
+          <div className="p-8 rounded-[32px] border border-zinc-100 dark:border-white/5 shadow-[0_1px_3px_rgba(0,0,0,0.02)] bg-white dark:bg-zinc-900/40 backdrop-blur-md">
             <InsightSection insights={[
               {
                 title: `Significant growth in ${metadata?.columns?.[0] || 'Primary Metric'}`,
@@ -133,26 +134,26 @@ export const DashboardView = React.memo(function DashboardView({ metadata, onNew
         <div className="space-y-8">
           <RecentQueries />
 
-          <div className="p-6 rounded-2xl border border-zinc-100 dark:border-zinc-900 shadow-[0_1px_3px_rgba(0,0,0,0.04)] bg-white">
-            <h3 className="text-sm font-semibold text-[#1D1D1F] uppercase tracking-wider mb-4 flex items-center gap-2">
-              <FileText size={16} className="text-[#0071E3]" />
+          <div className="p-8 rounded-[32px] border border-zinc-100 dark:border-white/5 shadow-[0_1px_3px_rgba(0,0,0,0.02)] bg-white dark:bg-zinc-900/40 backdrop-blur-md">
+            <h3 className="text-sm font-semibold text-apple-text-primary dark:text-white uppercase tracking-wider mb-6 flex items-center gap-2 opacity-80">
+              <FileText size={16} className="text-apple-blue" />
               File Summary
             </h3>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-[#86868B]">Total Rows</span>
-                <span className="font-bold">{metadata?.rowCount || 0}</span>
+            <div className="space-y-5">
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-apple-text-secondary">Total Rows</span>
+                <span className="font-bold dark:text-white">{metadata?.rowCount || 0}</span>
               </div>
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-[#86868B]">Columns</span>
-                <span className="font-bold">{metadata?.columns?.length || 0}</span>
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-apple-text-secondary">Columns</span>
+                <span className="font-bold dark:text-white">{metadata?.columns?.length || 0}</span>
               </div>
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-[#86868B]">File Size</span>
-                <span className="font-bold">2.4 MB</span>
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-apple-text-secondary">File Size</span>
+                <span className="font-bold dark:text-white">2.4 MB</span>
               </div>
-              <div className="pt-4 border-t border-zinc-100">
-                <button className="w-full py-2 text-xs font-semibold text-[#0071E3] hover:bg-[#0071E3]/5 rounded-lg transition-colors">
+              <div className="pt-6 mt-2 border-t border-zinc-100 dark:border-white/5">
+                <button className="w-full py-3 text-sm font-semibold text-apple-blue hover:bg-apple-blue/5 rounded-xl transition-all">
                   View Data Table
                 </button>
               </div>
