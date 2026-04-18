@@ -344,7 +344,6 @@ export function ChartCard({
           )}
         </div>
       </div>
-      </div>
     </motion.div>
   );
 }

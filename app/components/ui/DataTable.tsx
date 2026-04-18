@@ -1,10 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useCallback } from "react";
-import { 
-  FixedSizeList as List, 
-  ListChildComponentProps 
-} from "react-window";
+
 import { 
   motion, 
   AnimatePresence 

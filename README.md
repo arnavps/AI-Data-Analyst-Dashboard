@@ -88,6 +88,16 @@ IT-dependent                  Self-service analytics
 | **Logging** | Winston 3.19.0 | Structured logging for backend |
 | **HTTP Logging** | Morgan 1.10.1 | Request/response logging |
 | **CORS** | CORS 2.8.6 | Cross-origin resource sharing |
+| **Security** | Helmet 8.1.0 | HTTP security headers |
+| **Rate Limiting** | Express Rate Limit 8.3.2 | API rate limiting |
+| **Compression** | Compression 1.8.1 | Response compression |
+| **Caching** | Node-Cache 5.1.2 | In-memory caching |
+| **Redis** | IORedis 5.10.1 | Redis client for caching |
+| **Error Tracking** | Sentry 10.49.0 | Error monitoring and performance |
+| **Testing (Unit)** | Jest 29.7.0 | Unit testing framework |
+| **Testing (E2E)** | Playwright 1.59.1 | End-to-end testing |
+| **Testing (React)** | React Testing Library 16.3.2 | Component testing utilities |
+| **Bundle Analysis** | @next/bundle-analyzer 16.2.4 | Webpack bundle analysis |
 | **Utilities** | clsx + tailwind-merge | Conditional class merging and deduplication |
 | **Build Tool** | PostCSS | CSS processing with Tailwind integration |
 | **Linting** | ESLint 9 + Next Config | Code quality and consistency |
@@ -109,12 +119,38 @@ ai-data-analyst-dashboard/
 │
 ├── 📁 app/                          # Next.js App Router (Application Layer)
 │   ├── 📁 components/               # React Components
-│   │   ├── 📁 ui/                   # Reusable UI Components
+│   │   ├── 📁 ui/                   # Reusable UI Components (15 items)
 │   │   │   ├── Button.tsx           # Apple-style button with variants
+│   │   │   ├── Button.test.tsx      # Unit tests for Button
 │   │   │   ├── Card.tsx             # Glassmorphism card component
+│   │   │   ├── ChartCard.tsx        # Interactive chart wrapper (Recharts)
+│   │   │   ├── CountUp.tsx          # Animated number counter
+│   │   │   ├── DataTable.tsx        # Virtualized data table
+│   │   │   ├── EmptyState.tsx       # Empty state illustration
+│   │   │   ├── ErrorState.tsx       # Error state component
+│   │   │   ├── FileUploader.tsx     # Drag-and-drop file upload
 │   │   │   ├── Input.tsx            # Styled input with focus states
+│   │   │   ├── Ripple.tsx           # Material ripple effect
 │   │   │   ├── Select.tsx           # Custom dropdown component
-│   │   │   └── FileUploader.tsx     # Drag-and-drop file upload
+│   │   │   ├── Skeleton.tsx         # Loading skeleton placeholder
+│   │   │   ├── Spinner.tsx          # Loading spinner
+│   │   │   └── Tooltip.tsx          # Hover tooltip component
+│   │   │
+│   │   ├── 📁 chat/                 # Chat Interface Components (3 items)
+│   │   │   ├── ChatInput.tsx        # Chat message input
+│   │   │   ├── ChatInterface.tsx    # Main chat container
+│   │   │   └── ChatMessage.tsx      # Individual message bubble
+│   │   │
+│   │   ├── 📁 dashboard/            # Dashboard Components (4 items)
+│   │   │   ├── DashboardHeader.tsx  # Dashboard header with search
+│   │   │   ├── DashboardView.tsx    # Main dashboard layout
+│   │   │   ├── MetricGrid.tsx     # KPI metrics grid
+│   │   │   └── RecentQueries.tsx    # Recent queries history
+│   │   │
+│   │   ├── 📁 insights/             # AI Insights Components (2 items)
+│   │   │   ├── InsightCard.tsx      # Individual insight card
+│   │   │   └── InsightSection.tsx   # Insights container
+│   │   │
 │   │   ├── 📁 features/             # Feature-specific components (planned)
 │   │   ├── Navbar.tsx               # Sticky navigation with blur
 │   │   ├── LandingHero.tsx          # Animated hero section
@@ -122,7 +158,7 @@ ai-data-analyst-dashboard/
 │   │   └── Footer.tsx               # Site footer
 │   │
 │   ├── 📁 dashboard/                # Dashboard route (/dashboard)
-│   │   └── page.tsx                 # Full dashboard implementation
+│   │   └── page.tsx                 # Full dashboard with chat/view toggle
 │   │
 │   ├── 📁 lib/                      # Utility Functions
 │   │   └── utils.ts                 # cn() helper for class merging
@@ -148,9 +184,13 @@ ai-data-analyst-dashboard/
 ├── 📁 backend/                      # Node.js + Express Backend API
 │   ├── 📁 src/                      # Source code
 │   │   ├── 📁 controllers/          # Request handlers (upload, query)
-│   │   ├── 📁 middleware/           # Express middleware (errorHandler)
+│   │   ├── 📁 middleware/           # Express middleware (errorHandler, rate limit)
 │   │   ├── 📁 routes/               # API route definitions
-│   │   ├── 📁 services/             # Business logic layer
+│   │   ├── 📁 services/             # Business logic layer (4 services)
+│   │   │   ├── ai.service.js        # OpenAI/Gemini integration
+│   │   │   ├── cache.service.js     # Caching layer (Redis + Node-Cache)
+│   │   │   ├── csv.service.js       # CSV parsing and type detection
+│   │   │   └── dataProcessor.service.js  # Data aggregation & processing
 │   │   └── 📁 utils/                # Utility functions (logger)
 │   ├── 📁 uploads/                  # Temporary file storage
 │   ├── 📁 node_modules/             # Backend dependencies
@@ -163,15 +203,26 @@ ai-data-analyst-dashboard/
 │   └── server.js                    # Express server entry point
 │
 ├── 📁 .next/                        # Next.js Build Output
+├── 📁 .swc/                         # SWC Compiler Cache
 ├── 📁 node_modules/                 # Frontend dependencies
 │
+├── 📁 tests/                        # Test Suite
+│   └── 📁 e2e/                      # End-to-end tests (Playwright)
+│       └── dashboard.spec.ts        # Dashboard E2E tests
+│
 ├── .gitignore                       # Git ignore rules
-├── next.config.ts                   # Next.js configuration
+├── next.config.ts                   # Next.js configuration + Sentry + Bundle Analyzer
 ├── package.json                     # Frontend dependencies & scripts
 ├── package-lock.json                # Locked dependency versions
 ├── postcss.config.mjs               # PostCSS configuration
 ├── tsconfig.json                    # TypeScript configuration
 ├── eslint.config.mjs                # ESLint rules
+├── jest.config.js                   # Jest testing configuration
+├── jest.setup.js                    # Jest setup file
+├── playwright.config.ts             # Playwright E2E configuration
+├── sentry.client.config.ts          # Sentry client-side config
+├── sentry.edge.config.ts            # Sentry edge runtime config
+├── sentry.server.config.ts          # Sentry server-side config
 ├── next-env.d.ts                    # Next.js TypeScript declarations
 ├── AGENTS.md                        # AI agent instructions
 ├── CLAUDE.md                        # Claude-specific notes
@@ -182,18 +233,22 @@ ai-data-analyst-dashboard/
 
 | Folder | Purpose |
 |--------|---------|
-| `app/components/ui/` | Atomic design system components (buttons, cards, inputs) |
-| `app/components/features/` | Domain-specific components (charts, data tables, chat) |
-| `app/dashboard/` | Main application interface with sidebar, stats, and uploads |
+| `app/components/ui/` | Atomic design system components (buttons, cards, charts, tables) |
+| `app/components/chat/` | Chat interface components (input, messages, interface) |
+| `app/components/dashboard/` | Dashboard-specific components (header, metrics, queries) |
+| `app/components/insights/` | AI insights display components |
+| `app/components/features/` | Additional feature-specific components |
+| `app/dashboard/` | Main dashboard page with chat/view toggle |
 | `app/lib/` | Shared utilities, hooks, and helper functions |
-| `backend/` | Express.js API server with CSV processing & AI integration |
+| `backend/` | Express.js API server with security & caching |
 | `backend/src/controllers/` | API endpoint handlers (upload, query) |
-| `backend/src/middleware/` | Express middleware (error handling, validation) |
+| `backend/src/middleware/` | Express middleware (error handling, rate limiting, security) |
 | `backend/src/routes/` | Route definitions for API endpoints |
-| `backend/src/services/` | Business logic (CSV parsing, AI processing) |
+| `backend/src/services/` | Business logic (AI, caching, CSV, data processing) |
 | `backend/src/utils/` | Helper utilities (Winston logger) |
 | `docs/` | Comprehensive documentation and project planning |
 | `public/` | Static assets served directly without processing |
+| `tests/e2e/` | Playwright end-to-end tests |
 
 ---
 

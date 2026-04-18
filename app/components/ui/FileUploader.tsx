@@ -17,9 +17,14 @@ interface FileMetadata {
   headers: string[];
 }
 
-export function FileUploader() {
+interface FileUploaderProps {
+  onSuccess?: (result: any) => void;
+}
+
+export function FileUploader({ onSuccess }: FileUploaderProps) {
   const [file, setFile] = useState<File | null>(null);
   const [metadata, setMetadata] = useState<FileMetadata | null>(null);
+  const [data, setData] = useState<any[] | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 

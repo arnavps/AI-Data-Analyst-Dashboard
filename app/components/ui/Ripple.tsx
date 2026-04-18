@@ -9,15 +9,21 @@ interface RippleProps {
   duration?: number;
 }
 
+interface RippleItem {
+  x: number;
+  y: number;
+  size: number;
+}
+
 export function Ripple({ color = "rgba(255, 255, 255, 0.3)", duration = 600 }: RippleProps) {
-  const [ripples, setRipples] = useState<React.CSSProperties[]>([]);
+  const [ripples, setRipples] = useState<RippleItem[]>([]);
 
   const addRipple = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const rippleContainer = event.currentTarget.getBoundingClientRect();
     const size = Math.max(rippleContainer.width, rippleContainer.height);
     const x = event.clientX - rippleContainer.left - size / 2;
     const y = event.clientY - rippleContainer.top - size / 2;
-    const newRipple = {
+    const newRipple: RippleItem = {
       x,
       y,
       size,

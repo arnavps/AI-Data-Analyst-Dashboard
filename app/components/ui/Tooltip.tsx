@@ -14,7 +14,7 @@ interface TooltipProps {
 
 export function Tooltip({ children, content, position = "top", delay = 0.2, className }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = () => {
     timeoutRef.current = setTimeout(() => setIsVisible(true), delay * 1000);
