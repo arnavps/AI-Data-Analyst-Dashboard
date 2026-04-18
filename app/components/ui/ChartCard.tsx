@@ -34,8 +34,8 @@ export function ChartCard({
   subtitle,
   data,
   type,
-  dataKey,
-  categoryKey,
+  dataKey = "value",
+  categoryKey = "name",
   className,
   color = "#0071E3"
 }: ChartCardProps) {
