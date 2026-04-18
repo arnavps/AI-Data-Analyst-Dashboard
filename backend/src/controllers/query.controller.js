@@ -1,4 +1,5 @@
 const aiService = require('../services/ai.service');
+const dataProcessorService = require('../services/dataProcessor.service');
 const { fileStore } = require('./upload.controller');
 
 exports.queryData = async (req, res, next) => {
@@ -22,16 +23,18 @@ exports.queryData = async (req, res, next) => {
       preview: metadata.preview
     });
 
-    // 2. Generate insights based on the context (using preview for now)
-    const insights = await aiService.generateInsights(metadata.preview, { question, queryPlan });
+    // 2. Execute the query plan on the full dataset
+    const queryResult = dataProcessorService.executeQuery(metadata.data, queryPlan);
+
+    // 3. Generate insights based on the actual results
+    const insights = await aiService.generateInsights(queryResult.data, { question, queryPlan });
 
     res.status(200).json({
       success: true,
       data: {
-        queryPlan,
+        ...queryResult,
         insights,
-        chartType: queryPlan.chartType || 'bar',
-        visualization: queryPlan.visualization,
+        queryPlan,
         fileId
       },
       meta: {

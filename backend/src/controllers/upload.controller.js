@@ -27,6 +27,7 @@ exports.uploadFile = async (req, res, next) => {
       columnTypes: types,
       stats: stats,
       preview: results.data.slice(0, 5),
+      data: results.data, // Store full data for querying
       createdAt: new Date().toISOString()
     };
 
