@@ -8,19 +8,8 @@ import { Input } from "@/app/components/ui/Input";
 import { Select } from "@/app/components/ui/Select";
 import { FileUploader } from "@/app/components/ui/FileUploader";
 import { DataTable } from "@/app/components/ui/DataTable";
+import { ChartCard } from "@/app/components/ui/ChartCard";
 import { motion } from "framer-motion";
-import { 
-  BarChart3, 
-  LayoutDashboard, 
-  Settings, 
-  Users, 
-  Search, 
-  Bell, 
-  Plus, 
-  TrendingUp, 
-  Activity,
-  ChevronRight
-} from "lucide-react";
 
 export default function Home() {
   const [selectedRange, setSelectedRange] = React.useState("last-30");
@@ -47,6 +36,33 @@ export default function Home() {
     amount: Math.floor(Math.random() * 10000) + 100,
     date: new Date(2024, 0, 1 + i).toISOString(),
   }));
+
+  const revenueData = [
+    { month: "Jan", revenue: 45000 },
+    { month: "Feb", revenue: 52000 },
+    { month: "Mar", revenue: 48000 },
+    { month: "Apr", revenue: 61000 },
+    { month: "May", revenue: 55000 },
+    { month: "Jun", revenue: 67000 },
+    { month: "Jul", revenue: 72000 },
+  ];
+
+  const categoryData = [
+    { name: "SaaS", value: 400 },
+    { name: "Hardware", value: 300 },
+    { name: "Services", value: 300 },
+    { name: "Consulting", value: 200 },
+  ];
+
+  const userActivityData = [
+    { day: "Mon", users: 1200 },
+    { day: "Tue", users: 1500 },
+    { day: "Wed", users: 1100 },
+    { day: "Thu", users: 1800 },
+    { day: "Fri", users: 2100 },
+    { day: "Sat", users: 1600 },
+    { day: "Sun", users: 1300 },
+  ];
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">
@@ -131,6 +147,42 @@ export default function Home() {
             <FileUploader />
           </section>
 
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <ChartCard 
+              title="Revenue Growth" 
+              subtitle="$124,592" 
+              type="area" 
+              data={revenueData} 
+              dataKey="revenue" 
+              categoryKey="month" 
+            />
+            <ChartCard 
+              title="Daily Active Users" 
+              subtitle="2,482" 
+              type="bar" 
+              data={userActivityData} 
+              dataKey="users" 
+              categoryKey="day" 
+              color="#34C759"
+            />
+            <ChartCard 
+              title="Market Share" 
+              subtitle="24.5%" 
+              type="pie" 
+              data={categoryData} 
+              dataKey="value" 
+              categoryKey="name" 
+              color="#5856D6"
+            />
+            <StatCard 
+              title="Session Duration" 
+              value="4m 32s" 
+              trend="+1.2%" 
+              trendUp={true} 
+            />
+          </div>
+
           {/* Data Table Section */}
           <section>
             <div className="mb-6 flex items-center justify-between">
@@ -147,104 +199,66 @@ export default function Home() {
             />
           </section>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatCard 
-              title="Total Revenue" 
-              value="$124,592" 
-              trend="+12.5%" 
-              trendUp={true} 
-            />
-            <StatCard 
-              title="Active Users" 
-              value="12,482" 
-              trend="+3.2%" 
-              trendUp={true} 
-            />
-            <StatCard 
-              title="Conversion Rate" 
-              value="3.42%" 
-              trend="-0.5%" 
-              trendUp={false} 
-            />
-            <StatCard 
-              title="Session Duration" 
-              value="4m 32s" 
-              trend="+1.2%" 
-              trendUp={true} 
-            />
-          </div>
-
           {/* Main Analytics Area */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <Card className="lg:col-span-2">
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
-                  <CardTitle>Growth Analysis</CardTitle>
-                  <CardDescription>Monthly growth over the last year.</CardDescription>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="flex items-center space-x-1">
-                    <div className="h-3 w-3 rounded-full bg-apple-blue" />
-                    <span className="text-xs text-text-secondary">Direct</span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <div className="h-3 w-3 rounded-full bg-zinc-300" />
-                    <span className="text-xs text-text-secondary">Referral</span>
-                  </div>
+                  <CardTitle>AI Activity Log</CardTitle>
+                  <CardDescription>Real-time processing updates from your AI agents.</CardDescription>
                 </div>
               </CardHeader>
-              <CardContent className="h-64 flex items-end justify-between space-x-2 pt-4">
-                {/* Mock Chart */}
-                {[40, 60, 45, 80, 55, 90, 75, 100, 85, 95, 110, 130].map((val, i) => (
-                  <motion.div 
-                    key={i}
-                    initial={{ height: 0 }}
-                    animate={{ height: `${val}%` }}
-                    transition={{ duration: 0.8, delay: i * 0.05, ease: "easeOut" }}
-                    className="flex-1 bg-gradient-to-t from-apple-blue to-apple-blue-bright rounded-t-sm relative group"
-                  >
-                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-zinc-900 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                      ${val}k
-                    </div>
-                  </motion.div>
-                ))}
+              <CardContent className="space-y-6 pt-4">
+                <ActivityItem 
+                  user="AI Agent Alpha" 
+                  action="completed anomaly detection on Q1 dataset" 
+                  time="2m ago" 
+                />
+                <ActivityItem 
+                  user="AI Agent Beta" 
+                  action="optimized query latency for production" 
+                  time="15m ago" 
+                />
+                <ActivityItem 
+                  user="System" 
+                  action="detected a storage limit warning" 
+                  time="1h ago" 
+                  isAlert
+                />
+                <ActivityItem 
+                  user="AI Agent Gamma" 
+                  action="generated 5 new predictive models" 
+                  time="3h ago" 
+                />
+                <Button variant="ghost" size="sm" className="w-full text-apple-blue">
+                  View full audit log <ChevronRight size={14} className="ml-1" />
+                </Button>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Recent Activity</CardTitle>
-                <CardDescription>Latest events from your team.</CardDescription>
+                <CardTitle>System Performance</CardTitle>
+                <CardDescription>Current operational state.</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <ActivityItem 
-                  user="Sarah K." 
-                  action="published a new report" 
-                  time="2m ago" 
-                />
-                <ActivityItem 
-                  user="John D." 
-                  action="updated the data schema" 
-                  time="15m ago" 
-                />
-                <ActivityItem 
-                  user="AI Agent" 
-                  action="detected a performance anomaly" 
-                  time="1h ago" 
-                  isAlert
-                />
-                <ActivityItem 
-                  user="Emma W." 
-                  action="shared project with team" 
-                  time="3h ago" 
-                />
-                <Button variant="ghost" size="sm" className="w-full text-apple-blue">
-                  View all activity <ChevronRight size={14} className="ml-1" />
-                </Button>
+              <CardContent className="flex items-center justify-center h-48">
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-success">99.9%</div>
+                  <p className="text-sm text-text-secondary mt-1 uppercase tracking-wider font-semibold">Uptime Status</p>
+                  <div className="mt-4 flex items-center justify-center space-x-1">
+                    {Array.from({ length: 20 }).map((_, i) => (
+                      <div key={i} className="h-4 w-1 bg-success rounded-full opacity-50" />
+                    ))}
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
+        </div>
+      </main>
+    </div>
+  );
+}
         </div>
       </main>
     </div>
