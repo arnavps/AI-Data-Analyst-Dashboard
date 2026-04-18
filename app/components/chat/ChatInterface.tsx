@@ -15,6 +15,7 @@ import {
 import ChatMessage, { Message } from "./ChatMessage";
 import ChatInput from "./ChatInput";
 import ChartCard from "../ui/ChartCard";
+import { InsightSection } from "../insights/InsightSection";
 
 interface ChatInterfaceProps {
   fileId: string;
@@ -70,7 +71,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ fileId, metadata }) => {
         const aiMessage: Message = {
           id: (Date.now() + 1).toString(),
           role: "ai",
-          content: result.data.insights?.[0] || "Here are the results of your query:",
+          content: typeof result.data.insights?.[0] === 'object' 
+            ? result.data.insights[0].description 
+            : (result.data.insights?.[0] || "Here are the results of your query:"),
           type: result.data.queryPlan?.operation === "stats" ? "text" : (result.data.queryPlan?.chartType ? "chart" : "table"),
           data: result.data.data,
           chartType: result.data.queryPlan?.chartType,
@@ -258,20 +261,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ fileId, metadata }) => {
                     categoryKey={activeViz.categoryKey}
                   />
                   
-                  <div className="space-y-4">
-                    <h3 className="text-[13px] font-semibold text-apple-text-secondary uppercase tracking-wider">AI Insights</h3>
-                    {activeViz.insights?.map((insight: string, i: number) => (
-                      <motion.div 
-                        key={i}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                        className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100"
-                      >
-                         <p className="text-[14px] text-apple-text-primary leading-relaxed">{insight}</p>
-                      </motion.div>
-                    ))}
-                  </div>
+                  <InsightSection insights={activeViz.insights} />
                 </>
               ) : (
                 <div className="flex-1 flex flex-col items-center justify-center text-center p-8 opacity-40">

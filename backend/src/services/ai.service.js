@@ -87,12 +87,35 @@ A: { "operation": "top", "column": "product", "metric": "sum", "limit": 5, "char
   }
 
   async generateInsights(data, context) {
-    const systemPrompt = `
-You are a senior data analyst. Based on the provided data results and the original question, provide 3 key professional insights.
-Original Context: ${JSON.stringify(context)}
-Data Results: ${JSON.stringify(data.slice(0, 10))} (preview)
+    const { question, queryPlan } = context;
+    const statistics = JSON.stringify(data.slice(0, 15)); // Send a bit more context
 
-Return a JSON array of strings. Each string should be a concise, actionable insight.
+    const systemPrompt = `
+You are a senior data analyst. Analyze the provided data results and the original question to provide 3-5 professional, actionable insights.
+
+Original Question: ${question}
+Query Intent: ${JSON.stringify(queryPlan)}
+Data Context (Summary): ${statistics}
+
+Generate insights in this JSON format:
+{
+  "insights": [
+    {
+      "title": "Concise title (max 60 chars)",
+      "description": "1-2 sentence detailed explanation",
+      "metric": "Relevant number or percentage (e.g. +23%, $1.2M)",
+      "type": "trend|comparison|anomaly|predictive",
+      "sentiment": "positive|negative|neutral",
+      "recommendation": "Actionable next step"
+    }
+  ]
+}
+
+Guidelines:
+- Trend: Focus on % change and direction.
+- Comparison: Highlight highest, lowest, or specific outliers.
+- Recommendation: Suggest a clear business-focused next step.
+- Be concise, specific, and business-oriented.
 `;
 
     try {
@@ -101,17 +124,27 @@ Return a JSON array of strings. Each string should be a concise, actionable insi
           model: this.model,
           messages: [
             { role: "system", content: systemPrompt },
-            { role: "user", content: "Generate insights for this data." },
+            { role: "user", content: "Generate structured insights for this data." },
           ],
           response_format: { type: "json_object" },
+          temperature: 0.7,
         })
       );
 
       const result = JSON.parse(response.choices[0].message.content);
-      return result.insights || result;
+      return result.insights || [];
     } catch (error) {
       logger.error("AI Service Error (generateInsights):", error);
-      return ["Significant trends observed in primary metrics.", "Concentration detected in top-performing categories.", "Data suggests positive growth trajectory."];
+      return [
+        {
+          title: "Data Trend Analysis",
+          description: "A consistent pattern was observed in the primary data segments.",
+          metric: "Stable",
+          type: "trend",
+          sentiment: "neutral",
+          recommendation: "Continue monitoring for any shifts in baseline activity."
+        }
+      ];
     }
   }
 
