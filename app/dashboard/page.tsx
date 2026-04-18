@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app
 import { Input } from "@/app/components/ui/Input";
 import { Select } from "@/app/components/ui/Select";
 import { FileUploader } from "@/app/components/ui/FileUploader";
+import { DataTable } from "@/app/components/ui/DataTable";
 import { motion } from "framer-motion";
 import { 
   BarChart3, 
@@ -30,6 +31,22 @@ export default function Home() {
     { label: "Last 3 Months", value: "last-90" },
     { label: "Year to Date", value: "ytd" },
   ];
+
+  const dummyColumns = [
+    { key: "id", label: "ID", type: "number" as const },
+    { key: "customer", label: "Customer", type: "string" as const },
+    { key: "status", label: "Status", type: "string" as const },
+    { key: "amount", label: "Amount", type: "number" as const },
+    { key: "date", label: "Date", type: "date" as const },
+  ];
+
+  const dummyData = Array.from({ length: 50 }).map((_, i) => ({
+    id: 1000 + i,
+    customer: ["Apple Inc.", "Microsoft", "Google", "Amazon", "Tesla", "Netflix", "Meta"][i % 7],
+    status: ["Completed", "Pending", "Processing", "Cancelled"][i % 4],
+    amount: Math.floor(Math.random() * 10000) + 100,
+    date: new Date(2024, 0, 1 + i).toISOString(),
+  }));
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">
@@ -112,6 +129,22 @@ export default function Home() {
               <p className="text-sm text-text-secondary">Upload a CSV file to generate AI-powered insights.</p>
             </div>
             <FileUploader />
+          </section>
+
+          {/* Data Table Section */}
+          <section>
+            <div className="mb-6 flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-semibold">Recent Transactions</h2>
+                <p className="text-sm text-text-secondary">Detailed view of your analyzed datasets.</p>
+              </div>
+              <Button variant="outline" size="sm">View All</Button>
+            </div>
+            <DataTable 
+              columns={dummyColumns} 
+              data={dummyData} 
+              onExport={() => alert("Exporting data...")}
+            />
           </section>
 
           {/* Stats Grid */}
