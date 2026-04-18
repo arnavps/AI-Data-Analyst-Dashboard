@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  ArrowRight, 
-  Lightbulb, 
-  AlertCircle, 
+import {
+  TrendingUp,
+  TrendingDown,
+  ArrowRight,
+  Lightbulb,
+  AlertCircle,
   BarChart3,
   Share2
 } from "lucide-react";
@@ -31,29 +31,29 @@ export function InsightCard({ insight, index }: InsightCardProps) {
   const getIcon = () => {
     switch (insight.type) {
       case "trend":
-        return insight.sentiment === "positive" ? <TrendingUp className="text-apple-success" /> : <TrendingDown className="text-apple-error" />;
+        return insight.sentiment === "positive" ? <TrendingUp className="text-[#34C759]" /> : <TrendingDown className="text-[#FF3B30]" />;
       case "anomaly":
-        return <AlertCircle className="text-apple-error" />;
+        return <AlertCircle className="text-[#FF3B30]" />;
       case "predictive":
-        return <BarChart3 className="text-apple-blue" />;
+        return <BarChart3 className="text-[#0071E3]" />;
       default:
-        return <Lightbulb className="text-apple-blue" />;
+        return <Lightbulb className="text-[#0071E3]" />;
     }
   };
 
   const getSentimentStyles = () => {
     switch (insight.sentiment) {
-      case "positive": return "bg-apple-success/5 border-apple-success/20 group-hover:border-apple-success/40";
-      case "negative": return "bg-apple-error/5 border-apple-error/20 group-hover:border-apple-error/40";
-      default: return "bg-apple-blue/5 border-apple-blue/20 group-hover:border-apple-blue/40";
+      case "positive": return "bg-[#34C759]/5 border-[#34C759]/20 group-hover:border-[#34C759]/40";
+      case "negative": return "bg-[#FF3B30]/5 border-[#FF3B30]/20 group-hover:border-[#FF3B30]/40";
+      default: return "bg-[#0071E3]/5 border-[#0071E3]/20 group-hover:border-[#0071E3]/40";
     }
   };
 
   const getMetricStyles = () => {
     switch (insight.sentiment) {
-      case "positive": return "text-apple-success bg-apple-success/10 border-apple-success/20";
-      case "negative": return "text-apple-error bg-apple-error/10 border-apple-error/20";
-      default: return "text-apple-blue bg-apple-blue/10 border-apple-blue/20";
+      case "positive": return "text-[#34C759] bg-[#34C759]/10 border-[#34C759]/20";
+      case "negative": return "text-[#FF3B30] bg-[#FF3B30]/10 border-[#FF3B30]/20";
+      default: return "text-[#0071E3] bg-[#0071E3]/10 border-[#0071E3]/20";
     }
   };
 
@@ -63,7 +63,7 @@ export function InsightCard({ insight, index }: InsightCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
       className={cn(
-        "glass p-5 rounded-2xl border transition-all duration-300",
+        "p-5 rounded-2xl border transition-all duration-300 bg-white/80 backdrop-blur-md",
         getSentimentStyles()
       )}
     >
@@ -72,17 +72,17 @@ export function InsightCard({ insight, index }: InsightCardProps) {
           <div className="p-2 rounded-xl bg-zinc-100 dark:bg-zinc-900">
             {getIcon()}
           </div>
-          <h4 className="font-semibold text-text-primary text-sm leading-tight">
+          <h4 className="font-semibold text-[#1D1D1F] text-sm leading-tight">
             {insight.title}
           </h4>
         </div>
-        <button className="text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity hover:text-text-primary">
+        <button className="text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity hover:text-[#1D1D1F]">
           <Share2 size={16} />
         </button>
       </div>
 
       <div className="mt-4 flex items-baseline justify-between">
-        <p className="text-xs text-text-secondary leading-relaxed flex-1 mr-4">
+        <p className="text-xs text-[#86868B] leading-relaxed flex-1 mr-4">
           {insight.description}
         </p>
         <span className={cn(
@@ -95,7 +95,7 @@ export function InsightCard({ insight, index }: InsightCardProps) {
 
       {insight.recommendation && (
         <div className="mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-900">
-          <div className="flex items-center space-x-2 text-xs font-medium text-apple-blue">
+          <div className="flex items-center space-x-2 text-xs font-medium text-[#0071E3]">
             <ArrowRight size={14} />
             <span>{insight.recommendation}</span>
           </div>

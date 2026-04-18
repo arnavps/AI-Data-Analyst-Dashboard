@@ -7,11 +7,11 @@ import { DashboardHeader } from "./DashboardHeader";
 import { RecentQueries } from "./RecentQueries";
 import { ChartCard } from "../ui/ChartCard";
 import { InsightSection } from "../insights/InsightSection";
-import { 
-  Plus, 
-  Layout, 
-  Download, 
-  Share2, 
+import {
+  Plus,
+  Layout,
+  Download,
+  Share2,
   Calendar,
   Maximize2,
   BarChart3,
@@ -106,7 +106,7 @@ export const DashboardView = React.memo(function DashboardView({ metadata, onNew
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2 + i * 0.1 }}
               >
-                <ChartCard 
+                <ChartCard
                   title={chart.title}
                   subtitle={chart.subtitle}
                   type={chart.type as any}
@@ -122,7 +122,7 @@ export const DashboardView = React.memo(function DashboardView({ metadata, onNew
           </div>
 
           {/* Large Insight Section */}
-          <div className="glass p-8 rounded-[28px] border border-zinc-100 dark:border-zinc-900 shadow-sm bg-white">
+          <div className="p-8 rounded-[28px] border border-zinc-100 dark:border-zinc-900 shadow-[0_1px_3px_rgba(0,0,0,0.04)] bg-white">
             <InsightSection insights={[
               {
                 title: "Significant Revenue Growth in North Region",
@@ -147,27 +147,27 @@ export const DashboardView = React.memo(function DashboardView({ metadata, onNew
         {/* Sidebar Components */}
         <div className="space-y-8">
           <RecentQueries />
-          
-          <div className="glass p-6 rounded-2xl border border-zinc-100 dark:border-zinc-900 shadow-sm bg-white">
-            <h3 className="text-sm font-semibold text-text-primary uppercase tracking-wider mb-4 flex items-center gap-2">
-              <FileText size={16} className="text-apple-blue" />
+
+          <div className="p-6 rounded-2xl border border-zinc-100 dark:border-zinc-900 shadow-[0_1px_3px_rgba(0,0,0,0.04)] bg-white">
+            <h3 className="text-sm font-semibold text-[#1D1D1F] uppercase tracking-wider mb-4 flex items-center gap-2">
+              <FileText size={16} className="text-[#0071E3]" />
               File Summary
             </h3>
             <div className="space-y-4">
               <div className="flex justify-between items-center text-xs">
-                <span className="text-apple-text-secondary">Total Rows</span>
+                <span className="text-[#86868B]">Total Rows</span>
                 <span className="font-bold">{metadata?.rowCount || 0}</span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-apple-text-secondary">Columns</span>
+                <span className="text-[#86868B]">Columns</span>
                 <span className="font-bold">{metadata?.columns?.length || 0}</span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-apple-text-secondary">File Size</span>
+                <span className="text-[#86868B]">File Size</span>
                 <span className="font-bold">2.4 MB</span>
               </div>
               <div className="pt-4 border-t border-zinc-100">
-                <button className="w-full py-2 text-xs font-semibold text-apple-blue hover:bg-apple-blue/5 rounded-lg transition-colors">
+                <button className="w-full py-2 text-xs font-semibold text-[#0071E3] hover:bg-[#0071E3]/5 rounded-lg transition-colors">
                   View Data Table
                 </button>
               </div>
@@ -180,7 +180,7 @@ export const DashboardView = React.memo(function DashboardView({ metadata, onNew
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="fixed bottom-10 right-10 bg-apple-blue text-white p-4 rounded-full shadow-elevated z-50 flex items-center space-x-2 cursor-pointer"
+        className="fixed bottom-10 right-10 bg-[#0071E3] text-white p-4 rounded-full shadow-[0_12px_48px_rgba(0,0,0,0.12)] z-50 flex items-center space-x-2 cursor-pointer"
         onClick={onSwitchToChat}
       >
         <BarChart3 size={24} />

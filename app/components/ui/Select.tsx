@@ -35,8 +35,8 @@ export function Select({ options, value, onChange, placeholder = "Select...", cl
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "flex h-10 w-full items-center justify-between rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-2 text-sm shadow-sm ring-offset-white focus:outline-none focus:ring-2 focus:ring-apple-blue/50 transition-all duration-200",
-          isOpen && "border-apple-blue ring-2 ring-apple-blue/50"
+          "flex h-10 w-full items-center justify-between rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-2 text-sm shadow-sm ring-offset-white focus:outline-none focus:ring-2 focus:ring-[#0071E3]/50 transition-all duration-200",
+          isOpen && "border-[#0071E3] ring-2 ring-[#0071E3]/50"
         )}
       >
         <span className={cn("truncate", !selectedOption && "text-zinc-500")}>
@@ -61,8 +61,8 @@ export function Select({ options, value, onChange, placeholder = "Select...", cl
                   className={cn(
                     "flex w-full items-center rounded-md px-2 py-1.5 text-sm transition-colors",
                     option.value === value
-                      ? "bg-apple-blue text-white"
-                      : "hover:bg-zinc-100 dark:hover:bg-zinc-800 text-text-primary dark:text-white"
+                      ? "bg-[#0071E3] text-white"
+                      : "hover:bg-zinc-100 dark:hover:bg-zinc-800 text-[#1D1D1F] dark:text-white"
                   )}
                   onClick={() => {
                     onChange?.(option.value);

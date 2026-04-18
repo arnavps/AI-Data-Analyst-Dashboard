@@ -18,12 +18,12 @@ export function InsightSection({ insights }: InsightSectionProps) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <Sparkles size={18} className="text-apple-blue" />
-          <h3 className="text-sm font-semibold text-text-primary uppercase tracking-wider">
+          <Sparkles size={18} className="text-[#0071E3]" />
+          <h3 className="text-sm font-semibold text-[#1D1D1F] uppercase tracking-wider">
             Intelligent Insights
           </h3>
         </div>
-        <button 
+        <button
           onClick={() => setIsExpanded(!isExpanded)}
           className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-lg transition-colors"
         >
@@ -57,7 +57,7 @@ export function InsightSection({ insights }: InsightSectionProps) {
                 <Plus size={14} />
                 <span>Drill Down</span>
               </button>
-              <button className="flex items-center justify-center space-x-2 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 text-xs font-medium hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors text-apple-blue">
+              <button className="flex items-center justify-center space-x-2 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 text-xs font-medium hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors text-[#0071E3]">
                 <Sparkles size={14} />
                 <span>Compare</span>
               </button>

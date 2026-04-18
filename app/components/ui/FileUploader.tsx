@@ -68,6 +68,7 @@ export function FileUploader({ onSuccess }: FileUploaderProps) {
             cols: results.meta.fields?.length || 0,
             headers: results.meta.fields || [],
           });
+          setData(results.data);
           toast.success("File uploaded successfully");
         }, 1200); // Small delay for UX
       },
@@ -215,7 +216,23 @@ export function FileUploader({ onSuccess }: FileUploaderProps) {
                   </div>
                 )}
               </div>
-              <Button disabled={isUploading} size="sm">
+              <Button 
+                disabled={isUploading} 
+                size="sm"
+                onClick={() => {
+                  if (onSuccess && metadata && data) {
+                    onSuccess({
+                      fileId: Math.random().toString(36).substr(2, 9),
+                      name: metadata.name,
+                      size: metadata.size,
+                      rows: metadata.rows,
+                      cols: metadata.cols,
+                      headers: metadata.headers,
+                      data: data
+                    });
+                  }
+                }}
+              >
                 Analyze Now
               </Button>
             </div>

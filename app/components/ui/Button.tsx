@@ -17,11 +17,11 @@ import { Spinner } from "./Spinner";
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "primary", size = "md", isLoading, ...props }, ref) => {
     const variants = {
-      primary: "bg-gradient-to-b from-apple-blue to-apple-blue-bright text-white shadow-subtle hover:brightness-110",
-      secondary: "bg-white dark:bg-zinc-800 text-text-primary dark:text-white shadow-subtle hover:bg-zinc-50 dark:hover:bg-zinc-700",
-      outline: "bg-transparent border border-zinc-200 dark:border-zinc-700 text-text-primary dark:text-white hover:bg-zinc-50 dark:hover:bg-zinc-800",
-      ghost: "bg-transparent text-text-primary dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800",
-      danger: "bg-error text-white shadow-subtle hover:brightness-110",
+      primary: "bg-gradient-to-b from-[#0071E3] to-[#0077ED] text-white shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:brightness-110",
+      secondary: "bg-white dark:bg-zinc-800 text-[#1D1D1F] dark:text-white shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:bg-zinc-50 dark:hover:bg-zinc-700",
+      outline: "bg-white border border-zinc-200 dark:border-zinc-700 text-[#1D1D1F] dark:text-white hover:bg-zinc-50 dark:hover:bg-zinc-800",
+      ghost: "bg-transparent text-[#1D1D1F] dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800",
+      danger: "bg-[#FF3B30] text-white shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:brightness-110",
     };
 
     const sizes = {
@@ -38,7 +38,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         whileTap={{ scale: isLoading || props.disabled ? 1 : 0.95 }}
         transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
         className={cn(
-          "relative inline-flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-apple-blue/50 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden",
+          "relative inline-flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0071E3]/50 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden",
           variants[variant],
           sizes[size],
           className

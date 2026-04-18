@@ -10,15 +10,15 @@ import { FileUploader } from "@/app/components/ui/FileUploader";
 import ChatInterface from "@/app/components/chat/ChatInterface";
 import { DashboardView } from "@/app/components/dashboard/DashboardView";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Activity, 
-  LayoutDashboard, 
-  BarChart3, 
-  Users, 
-  Settings, 
-  Search, 
-  Bell, 
-  Plus, 
+import {
+  Activity,
+  LayoutDashboard,
+  BarChart3,
+  Users,
+  Settings,
+  Search,
+  Bell,
+  Plus,
   TrendingUp,
   MessageSquare
 } from "lucide-react";
@@ -43,7 +43,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-screen bg-[#FBFBFD] overflow-hidden text-apple-text-primary">
+    <div className="flex h-screen bg-[#FBFBFD] overflow-hidden text-[#1D1D1F]">
       {/* Sidebar */}
       <aside className="w-64 border-r border-zinc-200 dark:border-zinc-800 flex flex-col glass z-20">
         <div className="p-6">
@@ -56,16 +56,16 @@ export default function Home() {
         </div>
 
         <nav className="flex-1 px-4 space-y-1">
-          <NavItem 
-            icon={<LayoutDashboard size={18} />} 
-            label="Overview" 
-            active={viewMode === "dashboard"} 
-            onClick={() => setViewMode("dashboard")} 
+          <NavItem
+            icon={<LayoutDashboard size={18} />}
+            label="Overview"
+            active={viewMode === "dashboard"}
+            onClick={() => setViewMode("dashboard")}
           />
-          <NavItem 
-            icon={<MessageSquare size={18} />} 
-            label="AI Assistant" 
-            active={viewMode === "chat"} 
+          <NavItem
+            icon={<MessageSquare size={18} />}
+            label="AI Assistant"
+            active={viewMode === "chat"}
             onClick={() => setViewMode("chat")}
             disabled={!activeFile}
           />
@@ -79,7 +79,7 @@ export default function Home() {
             <div className="h-8 w-8 rounded-full bg-gradient-to-br from-zinc-300 to-zinc-400 overflow-hidden shadow-inner" />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold truncate">Arnav Shirwadkar</p>
-              <p className="text-[11px] text-apple-text-secondary truncate">Pro Analyst</p>
+              <p className="text-[11px] text-[#86868B] truncate">Pro Analyst</p>
             </div>
           </div>
         </div>
@@ -91,9 +91,9 @@ export default function Home() {
         <header className="h-16 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-8 bg-white/80 backdrop-blur-md z-10">
           <div className="flex-1 max-w-xl">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-apple-text-secondary h-4 w-4" />
-              <Input 
-                placeholder="Search analytics, reports..." 
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#86868B] h-4 w-4" />
+              <Input
+                placeholder="Search analytics, reports..."
                 className="pl-10 bg-zinc-100/50 border-transparent focus-visible:bg-white rounded-full transition-all"
               />
             </div>
@@ -103,7 +103,7 @@ export default function Home() {
             <button className="p-2 text-apple-text-secondary hover:text-apple-text-primary transition-colors">
               <Bell size={20} />
             </button>
-            <Button size="sm" className="rounded-full px-4 bg-apple-blue hover:bg-[#0077ED] shadow-subtle">
+            <Button size="sm" className="rounded-full px-4 bg-[#0071E3] hover:bg-[#0077ED] shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
               <Plus size={16} className="mr-1" />
               <span>New Analysis</span>
             </Button>
@@ -113,7 +113,7 @@ export default function Home() {
         <div className="flex-1 overflow-hidden">
           <AnimatePresence mode="wait">
             {!activeFile ? (
-              <motion.div 
+              <motion.div
                 key="dashboard"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -123,13 +123,13 @@ export default function Home() {
                 <header className="flex items-end justify-between">
                   <div>
                     <h1 className="text-[32px] font-bold tracking-tight text-apple-text-primary">Dashboard</h1>
-                    <p className="text-apple-text-secondary text-lg">Upload your data to start AI-powered analysis.</p>
+                    <p className="text-[#86868B] text-lg">Upload your data to start AI-powered analysis.</p>
                   </div>
                   <div className="w-48">
-                    <Select 
-                      options={ranges} 
-                      value={selectedRange} 
-                      onChange={setSelectedRange} 
+                    <Select
+                      options={ranges}
+                      value={selectedRange}
+                      onChange={setSelectedRange}
                     />
                   </div>
                 </header>
@@ -143,13 +143,13 @@ export default function Home() {
                 </section>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                   <StatCard title="Total Files" value="12" trend="+2" trendUp={true} />
-                   <StatCard title="AI Queries" value="1,482" trend="+12%" trendUp={true} />
-                   <StatCard title="System Load" value="12%" trend="-5%" trendUp={false} />
+                  <StatCard title="Total Files" value="12" trend="+2" trendUp={true} />
+                  <StatCard title="AI Queries" value="1,482" trend="+12%" trendUp={true} />
+                  <StatCard title="System Load" value="12%" trend="-5%" trendUp={false} />
                 </div>
               </motion.div>
             ) : viewMode === "chat" ? (
-              <motion.div 
+              <motion.div
                 key="chat"
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -159,16 +159,16 @@ export default function Home() {
                 <ChatInterface fileId={activeFile.id} metadata={activeFile.metadata} />
               </motion.div>
             ) : (
-              <motion.div 
+              <motion.div
                 key="dashboard-view"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 className="h-full"
               >
-                <DashboardView 
-                  metadata={activeFile.metadata} 
-                  onNewAnalysis={() => setActiveFile(null)} 
+                <DashboardView
+                  metadata={activeFile.metadata}
+                  onNewAnalysis={() => setActiveFile(null)}
                   onSwitchToChat={() => setViewMode("chat")}
                 />
               </motion.div>
@@ -180,26 +180,26 @@ export default function Home() {
   );
 }
 
-function NavItem({ 
-  icon, 
-  label, 
-  active = false, 
+function NavItem({
+  icon,
+  label,
+  active = false,
   disabled = false,
-  onClick 
-}: { 
-  icon: React.ReactNode; 
-  label: string; 
-  active?: boolean; 
+  onClick
+}: {
+  icon: React.ReactNode;
+  label: string;
+  active?: boolean;
   disabled?: boolean;
-  onClick?: () => void 
+  onClick?: () => void
 }) {
   return (
-    <div 
+    <div
       onClick={!disabled ? onClick : undefined}
       className={cn(
         "flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all cursor-pointer group",
-        active 
-          ? "bg-apple-blue text-white shadow-subtle" 
+        active
+          ? "bg-apple-blue text-white shadow-subtle"
           : "text-apple-text-secondary hover:bg-zinc-100 hover:text-apple-text-primary",
         disabled && "opacity-50 cursor-not-allowed pointer-events-none"
       )}
