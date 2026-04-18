@@ -1,26 +1,85 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme inline {
+  /* Colors */
+  --color-apple-blue: #0071E3;
+  --color-apple-blue-bright: #0077ED;
+  --color-background: #FBFBFD;
+  --color-background-dark: #1D1D1F;
+  --color-surface: #FFFFFF;
+  --color-text-primary: #1D1D1F;
+  --color-text-secondary: #86868B;
+  --color-accent: #06C;
+  --color-success: #34C759;
+  --color-error: #FF3B30;
+
+  /* Typography Scale */
+  --font-size-xs: 13px;
+  --font-size-sm: 17px;
+  --font-size-base: 21px;
+  --font-size-lg: 28px;
+  --font-size-xl: 40px;
+  --font-size-2xl: 56px;
+
+  /* Spacing (4px base) */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-24: 96px;
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  /* Shadows */
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-elevated: 0 12px 48px rgba(0, 0, 0, 0.12);
+
+  /* Motion */
+  --animate-quick: duration-200 cubic-bezier(0.4, 0, 0.2, 1);
+  --animate-standard: duration-400 cubic-bezier(0.4, 0, 0.2, 1);
+  --animate-deliberate: duration-600 cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root {
+  --background: #FBFBFD;
+  --foreground: #1D1D1F;
+  --secondary: #86868B;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #1D1D1F;
+    --foreground: #FBFBFD;
+    --secondary: #86868B;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.dark .glass {
+  background: rgba(29, 29, 31, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
