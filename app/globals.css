@@ -47,6 +47,7 @@
   --animate-quick: duration-200 cubic-bezier(0.4, 0, 0.2, 1);
   --animate-standard: duration-400 cubic-bezier(0.4, 0, 0.2, 1);
   --animate-deliberate: duration-600 cubic-bezier(0.4, 0, 0.2, 1);
+  --animate-spin-slow: spin 8s linear infinite;
 }
 
 :root {
