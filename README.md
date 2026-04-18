@@ -75,14 +75,19 @@ IT-dependent                  Self-service analytics
 
 | Category | Technology | Purpose |
 |----------|------------|---------|
-| **Framework** | Next.js 16.2.4 | React framework with App Router, SSR, and API routes |
+| **Framework (Frontend)** | Next.js 16.2.4 | React framework with App Router, SSR |
+| **Framework (Backend)** | Express.js 5.2.1 | Node.js web framework for REST API |
 | **Language** | TypeScript 5.0+ | Type-safe development with enhanced IDE support |
 | **Styling** | Tailwind CSS 4.0 | Utility-first CSS with custom design tokens |
 | **UI Components** | Custom + Lucide React | Apple-inspired components with consistent iconography |
 | **Animations** | Framer Motion 12 | Smooth, purposeful micro-interactions and transitions |
-| **File Processing** | PapaParse 5.5.3 | Client-side CSV parsing with type detection |
+| **File Processing** | PapaParse 5.5.3 | Client-side and server-side CSV parsing |
 | **Dropzone** | React Dropzone 15.0 | Drag-and-drop file upload with validation |
 | **Notifications** | Sonner 2.0.7 | Toast notifications with rich styling |
+| **File Upload** | Multer 2.1.1 | Server-side multipart form handling |
+| **Logging** | Winston 3.19.0 | Structured logging for backend |
+| **HTTP Logging** | Morgan 1.10.1 | Request/response logging |
+| **CORS** | CORS 2.8.6 | Cross-origin resource sharing |
 | **Utilities** | clsx + tailwind-merge | Conditional class merging and deduplication |
 | **Build Tool** | PostCSS | CSS processing with Tailwind integration |
 | **Linting** | ESLint 9 + Next Config | Code quality and consistency |
@@ -140,15 +145,31 @@ ai-data-analyst-dashboard/
 │   ├── vercel.svg                   # Vercel logo
 │   └── window.svg                   # Window icon asset
 │
+├── 📁 backend/                      # Node.js + Express Backend API
+│   ├── 📁 src/                      # Source code
+│   │   ├── 📁 controllers/          # Request handlers (upload, query)
+│   │   ├── 📁 middleware/           # Express middleware (errorHandler)
+│   │   ├── 📁 routes/               # API route definitions
+│   │   ├── 📁 services/             # Business logic layer
+│   │   └── 📁 utils/                # Utility functions (logger)
+│   ├── 📁 uploads/                  # Temporary file storage
+│   ├── 📁 node_modules/             # Backend dependencies
+│   ├── .env                         # Backend environment variables
+│   ├── .gitignore                   # Backend git ignore
+│   ├── combined.log                 # Winston logger output
+│   ├── error.log                    # Winston error log
+│   ├── package.json                 # Backend dependencies & scripts
+│   ├── package-lock.json            # Locked backend dependencies
+│   └── server.js                    # Express server entry point
+│
 ├── 📁 .next/                        # Next.js Build Output
-├── 📁 node_modules/                 # Dependencies
+├── 📁 node_modules/                 # Frontend dependencies
 │
 ├── .gitignore                       # Git ignore rules
 ├── next.config.ts                   # Next.js configuration
-├── package.json                     # Dependencies & scripts
+├── package.json                     # Frontend dependencies & scripts
 ├── package-lock.json                # Locked dependency versions
 ├── postcss.config.mjs               # PostCSS configuration
-├── tailwind.config.ts               # Tailwind CSS configuration
 ├── tsconfig.json                    # TypeScript configuration
 ├── eslint.config.mjs                # ESLint rules
 ├── next-env.d.ts                    # Next.js TypeScript declarations
@@ -165,6 +186,12 @@ ai-data-analyst-dashboard/
 | `app/components/features/` | Domain-specific components (charts, data tables, chat) |
 | `app/dashboard/` | Main application interface with sidebar, stats, and uploads |
 | `app/lib/` | Shared utilities, hooks, and helper functions |
+| `backend/` | Express.js API server with CSV processing & AI integration |
+| `backend/src/controllers/` | API endpoint handlers (upload, query) |
+| `backend/src/middleware/` | Express middleware (error handling, validation) |
+| `backend/src/routes/` | Route definitions for API endpoints |
+| `backend/src/services/` | Business logic (CSV parsing, AI processing) |
+| `backend/src/utils/` | Helper utilities (Winston logger) |
 | `docs/` | Comprehensive documentation and project planning |
 | `public/` | Static assets served directly without processing |
 
