@@ -1,7 +1,8 @@
 import * as React from "react";
 import { cn } from "@/app/lib/utils";
+import { motion, HTMLMotionProps } from "framer-motion";
 
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+interface CardProps extends HTMLMotionProps<"div"> {
   isGlass?: boolean;
   isElevated?: boolean;
 }
@@ -9,8 +10,13 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, isGlass = false, isElevated = false, ...props }, ref) => {
     return (
-      <div
+      <motion.div
         ref={ref}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-40px" }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        whileHover={{ y: -4, transition: { duration: 0.2 } }}
         className={cn(
           "rounded-lg border border-zinc-200/50 dark:border-zinc-800/50 bg-white dark:bg-zinc-900 transition-all",
           isGlass && "glass",

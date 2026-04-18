@@ -5,10 +5,12 @@ import { motion } from "framer-motion";
 import { TrendingUp, TrendingDown, Activity, DollarSign, Users, Package } from "lucide-react";
 import { cn } from "@/app/lib/utils";
 import { ResponsiveContainer, AreaChart, Area } from "recharts";
+import { CountUp } from "../ui/CountUp";
 
 interface Metric {
   title: string;
-  value: string;
+  value: number;
+  format: (val: number) => string;
   trend: string;
   trendUp: boolean;
   icon: React.ReactNode;
@@ -22,7 +24,8 @@ const mockData = [
 const metrics: Metric[] = [
   {
     title: "Total Revenue",
-    value: "$128,430",
+    value: 128430,
+    format: (val) => `$${Math.round(val).toLocaleString()}`,
     trend: "+12.5%",
     trendUp: true,
     icon: <DollarSign className="text-apple-blue" size={20} />,
@@ -30,7 +33,8 @@ const metrics: Metric[] = [
   },
   {
     title: "Active Users",
-    value: "2,842",
+    value: 2842,
+    format: (val) => Math.round(val).toLocaleString(),
     trend: "+5.2%",
     trendUp: true,
     icon: <Users className="text-apple-success" size={20} />,
@@ -38,7 +42,8 @@ const metrics: Metric[] = [
   },
   {
     title: "Avg. Order Value",
-    value: "$45.20",
+    value: 45.20,
+    format: (val) => `$${val.toFixed(2)}`,
     trend: "-2.1%",
     trendUp: false,
     icon: <Package className="text-orange-500" size={20} />,
@@ -46,7 +51,8 @@ const metrics: Metric[] = [
   },
   {
     title: "Conversion Rate",
-    value: "3.2%",
+    value: 3.2,
+    format: (val) => `${val.toFixed(1)}%`,
     trend: "+0.4%",
     trendUp: true,
     icon: <Activity className="text-purple-500" size={20} />,
@@ -54,15 +60,17 @@ const metrics: Metric[] = [
   }
 ];
 
-export function MetricGrid() {
+export const MetricGrid = React.memo(function MetricGrid() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {metrics.map((metric, i) => (
         <motion.div
           key={metric.title}
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.1 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-20px" }}
+          whileHover={{ y: -4, transition: { duration: 0.2 } }}
+          transition={{ delay: i * 0.1, duration: 0.4, ease: "easeOut" }}
           className="glass p-6 rounded-2xl border border-zinc-100 dark:border-zinc-900 shadow-sm hover:shadow-md transition-shadow group"
         >
           <div className="flex items-center justify-between mb-4">
@@ -80,7 +88,9 @@ export function MetricGrid() {
           
           <div>
             <p className="text-[11px] font-bold text-apple-text-secondary uppercase tracking-widest">{metric.title}</p>
-            <h2 className="text-3xl font-bold mt-1 tracking-tight">{metric.value}</h2>
+            <h2 className="text-3xl font-bold mt-1 tracking-tight">
+              <CountUp value={metric.value} format={metric.format} />
+            </h2>
           </div>
 
           <div className="h-10 mt-4 -mx-6">
@@ -108,4 +118,4 @@ export function MetricGrid() {
       ))}
     </div>
   );
-}
+});

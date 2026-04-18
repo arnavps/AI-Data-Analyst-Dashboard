@@ -25,6 +25,7 @@ import {
   Funnel,
   LabelList
 } from "recharts";
+import { motion } from "framer-motion";
 import { cn } from "@/app/lib/utils";
 import { 
   MoreHorizontal, 
@@ -243,7 +244,14 @@ export function ChartCard({
   };
 
   return (
-    <div className={cn("glass p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col h-full group", className)}>
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      whileHover={{ y: -4, transition: { duration: 0.2 } }}
+      className={cn("glass p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col h-full group transition-all", className)}
+    >
       <div className="flex items-center justify-between mb-6">
         <div>
           <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider">{title}</h3>
@@ -336,7 +344,8 @@ export function ChartCard({
           )}
         </div>
       </div>
-    </div>
+      </div>
+    </motion.div>
   );
 }
 

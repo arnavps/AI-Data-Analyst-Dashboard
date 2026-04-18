@@ -11,14 +11,17 @@ interface ButtonProps extends Omit<HTMLMotionProps<"button">, "children"> {
   children?: React.ReactNode;
 }
 
+import { Ripple } from "./Ripple";
+import { Spinner } from "./Spinner";
+
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "primary", size = "md", isLoading, ...props }, ref) => {
     const variants = {
-      primary: "bg-gradient-to-b from-apple-blue to-apple-blue-bright text-white shadow-subtle hover:brightness-110 active:brightness-95",
+      primary: "bg-gradient-to-b from-apple-blue to-apple-blue-bright text-white shadow-subtle hover:brightness-110",
       secondary: "bg-white dark:bg-zinc-800 text-text-primary dark:text-white shadow-subtle hover:bg-zinc-50 dark:hover:bg-zinc-700",
       outline: "bg-transparent border border-zinc-200 dark:border-zinc-700 text-text-primary dark:text-white hover:bg-zinc-50 dark:hover:bg-zinc-800",
       ghost: "bg-transparent text-text-primary dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800",
-      danger: "bg-error text-white shadow-subtle hover:brightness-110 active:brightness-95",
+      danger: "bg-error text-white shadow-subtle hover:brightness-110",
     };
 
     const sizes = {
@@ -31,18 +34,19 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <motion.button
         ref={ref}
         whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
         className={cn(
-          "inline-flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-apple-blue/50 disabled:opacity-50 disabled:cursor-not-allowed",
+          "relative inline-flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-apple-blue/50 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden",
           variants[variant],
           sizes[size],
           className
         )}
         {...props}
       >
+        <Ripple color={variant === "primary" || variant === "danger" ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.1)"} />
         {isLoading ? (
-          <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+          <Spinner size="sm" className="mr-2" />
         ) : null}
         {props.children}
       </motion.button>
