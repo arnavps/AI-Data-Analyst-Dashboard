@@ -8,7 +8,7 @@ This# AI Data Analyst Dashboard
 </p>
 
 <p align="center">
-  <b>Enterprise-grade data analysis with Apple-inspired design aesthetics</b>
+  <b>Enterprise-grade data analysis with Apple-inspired design aesthetics.</b>
 </p>
 
 ---
