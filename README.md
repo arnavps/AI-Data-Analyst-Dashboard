@@ -51,11 +51,11 @@ Modern businesses generate massive amounts of data, but extracting meaningful in
 
 **AI Data Analyst Dashboard** bridges this gap by providing:
 
-- **Natural Language Queries**: Ask questions in plain English, get instant visualizations
-- **Instant Insights**: AI-powered analysis that identifies trends, anomalies, and patterns
-- **Apple-Inspired Design**: Beautiful, intuitive interface that requires zero training
-- **Seamless Workflow**: Upload CSV → Ask Questions → Get Insights in seconds
-- **Cost-Effective**: Open-source with minimal API costs (~$5-20/month)
+- **Natural Language Queries**: Ask questions in plain English, get instant visualizations.
+- **Instant Insights**: AI-powered analysis that identifies trends, anomalies, and patterns.
+- **Apple-Inspired Design**: Beautiful, intuitive interface that requires zero training.
+- **Seamless Workflow**: Upload CSV → Ask Questions → Get Insights in seconds.
+- **Cost-Effective**: Open-source with minimal API costs (~$5-20/month).
 
 ### Key Value Propositions
 
