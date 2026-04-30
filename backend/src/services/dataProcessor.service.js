@@ -3,9 +3,7 @@ const { parse, format, isValid } = require("date-fns");
 const logger = require("../utils/logger");
 
 class DataProcessorService {
-  /**
-   * Executes a structured query on the provided dataset
-   */
+ 
   executeQuery(data, queryParams) {
     const startTime = Date.now();
     const { operation, column, metric, groupBy, limit, filter, sort } = queryParams;
