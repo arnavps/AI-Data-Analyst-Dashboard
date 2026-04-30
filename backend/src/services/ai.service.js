@@ -16,9 +16,7 @@ class AIService {
     this.model = process.env.AI_MODEL || "google/gemini-2.0-flash-lite-preview-02-05:free";
   }
 
-  /**
-   * Helper for retrying API calls with exponential backoff
-   */
+  
   async withRetry(fn, retries = 3, delay = 1000) {
     try {
       return await fn();
