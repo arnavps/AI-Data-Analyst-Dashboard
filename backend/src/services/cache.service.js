@@ -6,7 +6,7 @@ class CacheService {
   constructor() {
     this.useRedis = process.env.USE_REDIS === 'true';
     this.redisClient = null;
-    this.memoryCache = new NodeCache({ stdTTL: 3600, checkperiod: 120 }); // default 1h TTL
+    this.memoryCache = new NodeCache({ stdTTL: 3600, checkperiod: 120 }); 
 
     if (this.useRedis) {
       try {
