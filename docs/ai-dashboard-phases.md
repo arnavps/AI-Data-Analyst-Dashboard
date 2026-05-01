@@ -9,7 +9,6 @@
 ### Master Prompt:
 ```
 Create a Next.js 14 project with TypeScript and Tailwind CSS configured. Implement a comprehensive design system inspired by Apple's Human Interface Guidelines:
-
 DESIGN TOKENS:
 - Colors:
   * Primary: Gradient from #0071E3 to #0077ED (Apple blue)
